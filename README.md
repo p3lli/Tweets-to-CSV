@@ -6,14 +6,14 @@ Twitter API and then store them ina CSV file.
 
 ### Without a Makefile
 To initialize the project, create a virtual environment  
-with virtualenv. I have named mine 'python-twitter'.  
+with virtualenv. I have named mine 'env-twi'.  
 ```
-virtualenv python-twitter
+virtualenv env-twi
 ```
 
 Now, activate the virtual environment:  
 ```
-source ./python-twitter/bin/activate
+source ./env-twi/bin/activate
 ```
 
 Then install the required modules:  
