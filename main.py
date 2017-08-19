@@ -3,20 +3,21 @@ import sys
 import os
 import argparse
 import logging
-from tweets_handler import get_tweets
+from tweets_handler import ApiHandler
 
 def main(args):
     """Main entry point for the script."""
     logging.info('Starting script for hashtag #{}'.format(args.query_word))
     logging.debug('Running script verbosely')
     if validate_args(args):
-        get_tweets(args)
+        api_handler = ApiHandler(args.query_word)
+        api_handler.get_tweets()
     else:
         logging.info('Script stopped')
 
 
 def get_parser():
-    """Defines the parser object for argparse"""
+    """Defines the parser object for argparse."""
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('query_word', metavar='query_word', type=str,
             help='Hashtag content for the main query (no \'#\' included).')
