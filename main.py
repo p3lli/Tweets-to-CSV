@@ -1,11 +1,19 @@
 """Script to gather tweets based on hashtags and store them in a CSV file."""
 import sys
+import os
 import argparse
 import logging
+from tweets_handler import get_tweets
 
 def main(args):
     """Main entry point for the script."""
-    pass
+    logging.info('Starting script for hashtag #{}'.format(args.query_word))
+    logging.debug('Running script verbosely')
+    if validate_args(args):
+        get_tweets(args)
+    else:
+        logging.info('Script stopped')
+
 
 def get_parser():
     """Defines the parser object for argparse"""
@@ -19,6 +27,24 @@ def get_parser():
     return parser
 
 
+def validate_args(args):
+    """Validates the arguments using the following rules:
+    - 'query_word' must not have whitespaces
+    - 'out_dir' must be an existing directory"""
+    valid_args = True
+    if ' ' in args.query_word:
+        logging.error('ERROR: \'#{}\' is not a valid hashtag'.format(
+            args.query_word))
+        valid_args = False
+    if os.path.isdir(args.out_dir) == False:
+        logging.error('ERROR: \'{}\' is not an existing directory'
+                .format(args.out_dir))
+        valid_args = False
+    if valid_args:
+        logging.debug('Input parameters has been validated')
+    return valid_args
+
+
 if __name__ == '__main__':
     parser = get_parser()
     args = parser.parse_args()
@@ -26,5 +52,5 @@ if __name__ == '__main__':
     if args.verbose:
         logging_level = logging.DEBUG
     logging.basicConfig(level=logging_level, 
-            format='%(asctime)-15s %(module)s.%(funcName)s: %(message)s')
+            format='%(asctime)-15s %(message)s')
     main(args)
