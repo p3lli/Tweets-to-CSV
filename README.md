@@ -5,8 +5,15 @@ This small project has been made to collect tweets using Twitter API and then st
 ### Twitter API
 The project uses [python-twitter](https://github.com/bear/python-twitter) to connect with the Twitter API.  
 To run the project, you must first obtain all the API credentials, using a Twitter Account.  
-You have to create an .ini file in 'twitter_handler/resources' called 'twitter_api_credential.ini'.  
-The file format is showed in 'twitter_handler/resources/twitter_api_credential_example.ini'.  
+Follow the instructions at [https://apps.twitter.com/](https://apps.twitter.com/) to get:  
+
+* A Consumer Key
+* A Consumer Secret
+* An Access Token Key
+* An Access Token Secret
+
+You have to create an .ini file in 'twitter_handler/resources' called 'twitter_api_credentials.ini'.  
+The file format is showed in 'twitter_handler/resources/twitter_api_credentials_example.ini'.  
 
 ### Without a Makefile
 To initialize the project, create a virtual environment with virtualenv. I have named mine 'env-twi'.  
