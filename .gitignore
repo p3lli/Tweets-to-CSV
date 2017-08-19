@@ -1,4 +1,4 @@
 *.pyc
 __pycache__
 env-twi/
-tweets_handler/resources/twitter_api_credential.ini
+tweets_handler/resources/twitter_api_credentials.ini
