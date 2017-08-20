@@ -1,6 +1,7 @@
 # Tweets in CSV with python
 
 This small project has been made to collect tweets using Twitter API and then store them in a CSV file.  
+At the moment, tweets are gathered based on keywords or from a specific account.  
 
 ### Twitter API
 The project uses [python-twitter](https://github.com/bear/python-twitter) to connect with the Twitter API.  
