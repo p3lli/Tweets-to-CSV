@@ -2,3 +2,4 @@
 __pycache__
 env-twi/
 tweets_handler/resources/twitter_api_credentials.ini
+*.csv
