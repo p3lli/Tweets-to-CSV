@@ -39,7 +39,7 @@ class ApiHandler(object):
         results = self.api.GetSearch(term=self.query_word,
                                      count=self.MAX_COUNT_KEYWORD,
                                      include_entities=self.INCLUDE_ENTITIES)
-        return list(set([status.text for status in results]))
+        return results
 
 
     def get_tweets_by_user(self):
@@ -49,7 +49,7 @@ class ApiHandler(object):
         results = self.api.GetUserTimeline(screen_name=self.query_word,
                                            count=self.MAX_COUNT_USER,
                                            exclude_replies=self.EXCLUDE_REPLIES)
-        return [status.text for status in results]
+        return results
 
 
     def get_tweets(self):
