@@ -1,3 +1,4 @@
-python-twitter==3.3
-argparse==1.4.0
-configparser==3.5.0
+python-twitter
+argparse
+configparser
+pandas
