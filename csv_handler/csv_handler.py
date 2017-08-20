@@ -1,14 +1,16 @@
 import pandas as pd
+import configparser
 
 class RecordsHandler(object):
     """Handles collection of tweets."""
+    ATTR_FILE_INI = './csv_handler/resources/interesting_attributes.ini'
 
-    def __init__(self, tweets,
-                 interesting_attributes=['created_at',
-                                         'user',
-                                         'text']):
+    def __init__(self, tweets):
         self.tweets = tweets
-        self.interesting_attributes = interesting_attributes
+        config = configparser.ConfigParser()
+        config.read(self.ATTR_FILE_INI)
+        config_attributes = config['interesting-attributes']['attrs']
+        self.interesting_attributes = config_attributes.split(',')
 
     def extract_user_name(self):
         """Extracts the screen name from the object User."""
