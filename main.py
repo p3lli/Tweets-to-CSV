@@ -1,4 +1,4 @@
-"""Script to gather tweets based on hashtags and store them in a CSV file."""
+"""Script to gather tweets based and store them in a CSV file."""
 import sys
 import os
 import argparse
@@ -7,11 +7,14 @@ from tweets_handler import ApiHandler
 
 def main(args):
     """Main entry point for the script."""
-    logging.info('Starting script for hashtag #{}'.format(args.query_word))
-    logging.debug('Running script verbosely')
+    logging.info('Starting script'.format(args.query_word))
+    logging.debug('Input parameters: \'{}\', \'{}\', \'{}\''
+                  .format(args.search_type, args.query_word, args.out_dir))
     if validate_args(args):
-        api_handler = ApiHandler(args.query_word)
-        api_handler.get_tweets()
+        api_handler = ApiHandler(args.query_word, args.search_type)
+        tweets = api_handler.get_tweets()
+        print len(tweets)
+        print '\n'.join(tweet for tweet in tweets)
     else:
         logging.info('Script stopped')
 
@@ -19,28 +22,32 @@ def main(args):
 def get_parser():
     """Defines the parser object for argparse."""
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('search_type', metavar='search_type', type=str,
+            choices=['by-keyword', 'by-user'],
+            help='Specifies the type of search to be performed '
+            + '(by-keyword, by-user).')
     parser.add_argument('query_word', metavar='query_word', type=str,
-            help='Hashtag content for the main query (no \'#\' included).')
+            help='A keyword or a user to be searched.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
-    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true', 
-            help='Increase ouput verbosity.')
+    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
+            help='Increases ouput verbosity.')
     return parser
 
 
 def validate_args(args):
     """Validates the arguments using the following rules:
-    - 'query_word' must not have whitespaces
+    - length 'query_word' must be less than 15 characters if 'by-user'
     - 'out_dir' must be an existing directory"""
     valid_args = True
-    if ' ' in args.query_word:
-        logging.error('ERROR: \'#{}\' is not a valid hashtag'.format(
-            args.query_word))
+    if len(args.query_word) > 15 and args.search_type == 'by-user':
         valid_args = False
+        logging.error('ERROR: \'{}\' is not a valid user name'
+                      .format(args.query_word))
     if os.path.isdir(args.out_dir) == False:
+        valid_args = False
         logging.error('ERROR: \'{}\' is not an existing directory'
                 .format(args.out_dir))
-        valid_args = False
     if valid_args:
         logging.debug('Input parameters has been validated')
     return valid_args
@@ -52,6 +59,6 @@ if __name__ == '__main__':
     logging_level = logging.INFO
     if args.verbose:
         logging_level = logging.DEBUG
-    logging.basicConfig(level=logging_level, 
+    logging.basicConfig(level=logging_level,
             format='%(asctime)-15s %(message)s')
     main(args)
