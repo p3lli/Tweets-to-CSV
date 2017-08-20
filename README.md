@@ -36,12 +36,14 @@ pip install -r requirements.txt
 ```
 usage: main.py [-h] [-v] search_type query_word out_dir
 
-Script to gather tweets based and store them in a CSV file.
+Script made to gather tweets and store them in a CSV file.
 
 positional arguments:
-  search_type    Specifies the type of search to be performed (by-keyword, by-
-                 user).
-  query_word     A keyword or a user to be searched.
+  search_type    Specifies the type of search to be performed.
+                 Values accepted:
+                 -'by-keyword'
+                 -'by-user'
+  query_word     A keyword or a username to be used in the search.
   out_dir        Directory where the CSV file will be saved.
 
 optional arguments:
