@@ -32,4 +32,20 @@ Then install the required modules:
 pip install -r requirements.txt
 ```
 
-###
+### Usage
+```
+usage: main.py [-h] [-v] search_type query_word out_dir
+
+Script to gather tweets based and store them in a CSV file.
+
+positional arguments:
+  search_type    Specifies the type of search to be performed (by-keyword, by-
+                 user).
+  query_word     A keyword or a user to be searched.
+  out_dir        Directory where the CSV file will be saved.
+
+optional arguments:
+  -h, --help     show this help message and exit
+  -v, --verbose  Increases ouput verbosity.
+
+```
