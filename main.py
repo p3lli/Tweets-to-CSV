@@ -1,7 +1,8 @@
-"""Script to gather tweets based and store them in a CSV file."""
+"""Script made to gather tweets and store them in a CSV file."""
 import sys
 import os
 import argparse
+from argparse import RawTextHelpFormatter
 import logging
 from tweets_handler import ApiHandler
 
@@ -21,13 +22,16 @@ def main(args):
 
 def get_parser():
     """Defines the parser object for argparse."""
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__,
+                                     formatter_class=RawTextHelpFormatter)
     parser.add_argument('search_type', metavar='search_type', type=str,
             choices=['by-keyword', 'by-user'],
-            help='Specifies the type of search to be performed '
-            + '(by-keyword, by-user).')
+            help='Specifies the type of search to be performed.\n'
+            + 'Values accepted:\n'
+            + '-\'by-keyword\'\n'
+            + '-\'by-user\'\n')
     parser.add_argument('query_word', metavar='query_word', type=str,
-            help='A keyword or a user to be searched.')
+            help='A keyword or a username to be used in the search.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
