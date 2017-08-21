@@ -10,6 +10,7 @@ class RecordsHandler(object):
     """Handles collection of tweets."""
     ATTR_FILE_INI = './csv_handler/resources/interesting_attributes.ini'
 
+
     def __init__(self, tweets):
         self.tweets = tweets
         config = configparser.ConfigParser()
@@ -60,6 +61,7 @@ class RecordsHandler(object):
 
 class CSVFileHandler(object):
     """Handles the creation of the CSV file."""
+
 
     def __init__(self, args, records):
         self.query_word = args.query_word.replace(' ', '_')

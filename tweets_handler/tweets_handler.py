@@ -14,6 +14,7 @@ class ApiHandler(object):
     GET_TWEETS_BY = {'by-keyword': 'self.get_tweets_by_keyword()',
                      'by-user': 'self.get_tweets_by_user()'}
 
+
     def __init__(self, query_word, search_type):
         self.query_word = query_word
         self.search_type = search_type
