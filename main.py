@@ -5,7 +5,8 @@ import argparse
 from argparse import RawTextHelpFormatter
 import logging
 from tweets_handler import ApiHandler
-from csv_handler import RecordsHandler
+from csv_handler import RecordsHandler, CSVFileHandler
+
 
 def main(args):
     """Main entry point for the script."""
@@ -16,8 +17,9 @@ def main(args):
         api_handler = ApiHandler(args.query_word, args.search_type)
         tweets = api_handler.get_tweets()
         records_handler = RecordsHandler(tweets)
-        print records_handler.get_only_interesting_attributes()
-
+        records = records_handler.get_only_interesting_attributes()
+        csv_handler = CSVFileHandler(args, records)
+        csv_handler.export_csv()
     else:
         logging.info('Script stopped')
 
