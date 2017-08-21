@@ -42,7 +42,7 @@ Then install the required modules:
 pip install -r requirements.txt
 ```
 
-### Usage
+## Usage
 The project entry point is in `main.py`.  
 ```
 usage: main.py [-h] [-v] search_type query_word out_dir
