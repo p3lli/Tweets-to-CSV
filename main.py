@@ -1,11 +1,12 @@
 """Script made to gather tweets and store them in a CSV file."""
 import sys
 import os
+import logging
 import argparse
 from argparse import RawTextHelpFormatter
-import logging
 from tweets_handler import ApiHandler
-from csv_handler import RecordsHandler, CSVFileHandler
+from csv_handler import CSVFileHandler
+from utils import validate_args
 
 
 def main(args):
@@ -16,9 +17,7 @@ def main(args):
     if validate_args(args):
         api_handler = ApiHandler(args.query_word, args.search_type)
         tweets = api_handler.get_tweets()
-        records_handler = RecordsHandler(tweets)
-        records = records_handler.get_only_interesting_attributes()
-        csv_handler = CSVFileHandler(args, records)
+        csv_handler = CSVFileHandler(args, tweets)
         csv_handler.export_csv()
     else:
         logging.info('Script stopped')
@@ -41,24 +40,6 @@ def get_parser():
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
             help='Increases log verbosity.')
     return parser
-
-
-def validate_args(args):
-    """Validates the arguments using the following rules:
-    - length 'query_word' must be less than 15 characters if 'by-user'
-    - 'out_dir' must be an existing directory"""
-    valid_args = True
-    if len(args.query_word) > 15 and args.search_type == 'by-user':
-        valid_args = False
-        logging.error('ERROR: \'{}\' is not a valid user name'
-                      .format(args.query_word))
-    if os.path.isdir(args.out_dir) == False:
-        valid_args = False
-        logging.error('ERROR: \'{}\' is not an existing directory'
-                .format(args.out_dir))
-    if valid_args:
-        logging.debug('Input parameters has been validated')
-    return valid_args
 
 
 if __name__ == '__main__':

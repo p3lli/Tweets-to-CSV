@@ -42,6 +42,38 @@ Then install the required modules:
 pip install -r requirements.txt
 ```
 
+## Project Structure
+Here is the project structure. It consists of three subpackages for handling tweets, csv and general  
+utilities. Inside the csv subpackage there is a subsubpackage for handling single records.  
+Every subpackage has a module 'constants.py' containing any constant variable specific to that subpackage.  
+```
+Tweets-to-CSV
+├── main.py
+├── README.md
+├── requirements.txt
+├── csv_handler
+│   ├── constants.py
+│   ├── csv_handler.py
+│   ├── __init__.py
+│   ├── records_handler
+│   │   ├── constants.py
+│   │   ├── __init__.py
+│   │   └── records_handler.py
+│   └── resources
+│       └── interesting_attributes.ini
+├── tweets_handler
+│   ├── constants.py
+│   ├── __init__.py
+│   ├── resources
+│   │   ├── twitter_api_credentials_example.ini
+│   │   └── twitter_api_credentials.ini
+│   └── tweets_handler.py
+└── utils
+    ├── constants.py
+    ├── __init__.py
+    └── utils.py
+```
+
 ## Usage
 The project entry point is in `main.py`.  
 ```

@@ -1,18 +1,11 @@
-import twitter
 import logging
 import configparser
+import twitter
+import constants as const
 
 
 class ApiHandler(object):
     """Class that handles all the Twitter API comunication."""
-    CRED_FILE_INI = './tweets_handler/resources/twitter_api_credentials.ini'
-    HASHTAG_SYMBOL = '%23'
-    MAX_COUNT_KEYWORD = 100
-    MAX_COUNT_USER = 200
-    INCLUDE_ENTITIES = True
-    EXCLUDE_REPLIES = False
-    GET_TWEETS_BY = {'by-keyword': 'self.get_tweets_by_keyword()',
-                     'by-user': 'self.get_tweets_by_user()'}
 
 
     def __init__(self, query_word, search_type):
@@ -22,9 +15,9 @@ class ApiHandler(object):
 
 
     def get_credentials(self):
-        """Get credentials from CRED_FILE_INI"""
+        """Get credentials from CRED_FILE_INI."""
         config = configparser.ConfigParser()
-        config.read(self.CRED_FILE_INI)
+        config.read(const.CRED_FILE_INI)
         credentials = config['twitter-api']
         api = twitter.Api(consumer_key=credentials['consumer_key'],
                 consumer_secret=credentials['consumer_secret'],
@@ -34,25 +27,25 @@ class ApiHandler(object):
 
 
     def get_tweets_by_keyword(self):
-        """Gets tweets based on keyword"""
+        """Gets tweets based on keyword."""
         logging.debug('Getting tweets with keyword(s): {}'
                 .format(self.query_word))
         results = self.api.GetSearch(term=self.query_word,
-                                     count=self.MAX_COUNT_KEYWORD,
-                                     include_entities=self.INCLUDE_ENTITIES)
+                                     count=const.MAX_COUNT_KEYWORD,
+                                     include_entities=const.INCLUDE_ENTITIES)
         return results
 
 
     def get_tweets_by_user(self):
-        """Gets tweets based on user name"""
+        """Gets tweets based on user name."""
         logging.debug('Getting tweets from user: {}'
                 .format(self.query_word))
         results = self.api.GetUserTimeline(screen_name=self.query_word,
-                                           count=self.MAX_COUNT_USER,
-                                           exclude_replies=self.EXCLUDE_REPLIES)
+                                           count=const.MAX_COUNT_USER,
+                                           exclude_replies=const.EXCLUDE_REPLIES)
         return results
 
 
     def get_tweets(self):
-        """Gets tweets based on keywords or username"""
-        return eval(self.GET_TWEETS_BY[self.search_type])
+        """Gets tweets based on keywords or username."""
+        return eval(const.GET_TWEETS_BY[self.search_type])
