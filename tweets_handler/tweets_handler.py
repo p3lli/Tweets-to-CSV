@@ -34,7 +34,7 @@ class ApiHandler(object):
 
     def get_tweets_by_keyword(self):
         """Gets tweets based on keyword"""
-        logging.debug("Getting tweets with keyword(s): {}"
+        logging.debug('Getting tweets with keyword(s): {}'
                 .format(self.query_word))
         results = self.api.GetSearch(term=self.query_word,
                                      count=self.MAX_COUNT_KEYWORD,
@@ -44,7 +44,7 @@ class ApiHandler(object):
 
     def get_tweets_by_user(self):
         """Gets tweets based on user name"""
-        logging.debug("Getting tweets from user: {}"
+        logging.debug('Getting tweets from user: {}'
                 .format(self.query_word))
         results = self.api.GetUserTimeline(screen_name=self.query_word,
                                            count=self.MAX_COUNT_USER,
