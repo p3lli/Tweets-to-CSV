@@ -35,8 +35,13 @@ class CSVFileHandler(object):
         """Exports CSV file."""
         logging.debug('Exporting file \'{}\'...'.format(self.name_csv_file()))
         dataframe = pd.DataFrame(self.records)
-        dataframe.sort_values(const.CSV_SORTED_BY, inplace=True)
-        dataframe.to_csv(self.name_csv_file(), index=False,
-                         quoting=csv.QUOTE_NONE, encoding=const.CSV_ENCODING,
-                         escapechar='\\')
-        logging.info('Created file \'{}\''.format(self.name_csv_file()))
+        if dataframe.shape[0] > 0:
+            dataframe.sort_values(const.CSV_SORTED_BY, inplace=True)
+            dataframe.to_csv(self.name_csv_file(), index=False,
+                             quoting=csv.QUOTE_NONE,
+                             encoding=const.CSV_ENCODING,
+                             escapechar='\\')
+            logging.info('Created file \'{}\''.format(self.name_csv_file()))
+        else:
+            logging.info('No tweets retrieved for keyword \'{}\''
+                         .format(self.query_word))
