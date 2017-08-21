@@ -37,7 +37,7 @@ def get_parser():
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
-            help='Increases ouput verbosity.')
+            help='Increases log verbosity.')
     return parser
 
 

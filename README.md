@@ -48,6 +48,6 @@ positional arguments:
 
 optional arguments:
   -h, --help     show this help message and exit
-  -v, --verbose  Increases ouput verbosity.
+  -v, --verbose  Increases log verbosity.
 
 ```
