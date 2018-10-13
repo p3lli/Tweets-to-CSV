@@ -40,7 +40,8 @@ class CSVFileHandler(object):
             dataframe.to_csv(self.name_csv_file(), index=False,
                              quoting=csv.QUOTE_NONE,
                              encoding=const.CSV_ENCODING,
-                             escapechar='\\')
+                             escapechar='\\',
+                             sep=const.CSV_SEPARATOR)
             logging.info('Created file \'{}\''.format(self.name_csv_file()))
         else:
             logging.info('No tweets retrieved for keyword \'{}\''
