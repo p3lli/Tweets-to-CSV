@@ -38,7 +38,8 @@ class CSVFileHandler(object):
         if dataframe.shape[0] > 0:
             dataframe.sort_values(const.CSV_SORTED_BY, inplace=True)
             dataframe.to_csv(self.name_csv_file(), index=False,
-                             quoting=csv.QUOTE_NONE,
+                             quotechar='"',
+                             quoting=csv.QUOTE_NONNUMERIC,
                              encoding=const.CSV_ENCODING,
                              escapechar='\\',
                              sep=const.CSV_SEPARATOR)
