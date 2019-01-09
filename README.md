@@ -27,7 +27,20 @@ At the moment, the following attributes are guaranteed to be supported:
 * `user`
 
 ## Initialization
-To initialize the project, create a virtual environment with `virtualenv`.  
+To initialize the project, create a virtual environment with `virtualenv`
+inside the project directory.  
+To install `virtualenv` in Linux:  
+```
+sudo apt-get install python-pip python-dev build-essential
+pip install virtualenv
+```
+or in MacOS:  
+```
+brew install python
+pip install virtualenv
+```
+
+After the installation, change directory to the project directory and execute  
 ```
 virtualenv env-twi
 ```
