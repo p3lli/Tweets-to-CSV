@@ -14,8 +14,8 @@ Follow the instructions at [https://apps.twitter.com/](https://apps.twitter.com/
 * An Access Token Key
 * An Access Token Secret
 
-You have to create an `.ini` file in `twitter_handler/resources` called `twitter_api_credentials.ini`.  
-The file format is showed in `twitter_handler/resources/twitter_api_credentials_example.ini`.  
+You have to create an `.ini` file in `tweets_handler/resources` called `twitter_api_credentials.ini`.  
+The file format is showed in `tweets_handler/resources/twitter_api_credentials_example.ini`.  
 
 ### CSV Header
 A tweet is representend by a `twitter.models.Status` object from the `python-twitter` module.  
