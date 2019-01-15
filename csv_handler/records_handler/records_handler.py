@@ -45,7 +45,8 @@ class RecordsHandler(object):
             hashtags_list = []
             for hashtag in tweet.hashtags:
                 hashtags_list.append(hashtag.text)
-            tweet.hashtags = hashtags_list
+            tweet.hashtags = ', '.join(hashtags_list)
+
 
     def format_urls(self):
         """Formats 'urls' attribute."""
@@ -53,7 +54,8 @@ class RecordsHandler(object):
             urls_list = []
             for url in tweet.urls:
                 urls_list.append(url.expanded_url)
-            tweet.urls = urls_list
+            tweet.urls = ', '.join(urls_list)
+
 
     def get_only_interesting_attributes(self):
         """Isolates just the interesting attributes of the tweets."""

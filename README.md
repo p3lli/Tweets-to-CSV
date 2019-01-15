@@ -102,8 +102,9 @@ positional arguments:
   query_word     A keyword or a username to be used in the search.
   out_dir        Directory where the CSV file will be saved.
 
-optional arguments:
-  -h, --help     show this help message and exit
-  -v, --verbose  Increases log verbosity.
+  optional arguments:
+    -h, --help     show this help message and exit
+    -a, --append   Appends tweets to a compatible CSV (same search, different time).
+    -v, --verbose  Increases log verbosity.
 
 ```

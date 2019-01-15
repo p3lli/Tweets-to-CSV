@@ -37,6 +37,8 @@ def get_parser():
             help='A keyword or a username to be used in the search.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
+    parser.add_argument('-a', '--append', dest='append_to', action='store_true',
+            help='Appends tweets to a compatible CSV (same search, different time).')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
             help='Increases log verbosity.')
     return parser
