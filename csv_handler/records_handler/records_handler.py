@@ -56,6 +56,15 @@ class RecordsHandler(object):
                 urls_list.append(url.expanded_url)
             tweet.urls = ', '.join(urls_list)
 
+    def format_media(self):
+        """Formats 'media' attribute."""
+        for tweet in self.tweets:
+            media_list = []
+            if tweet.media and len(tweet.media) > 0:
+                for media in tweet.media:
+                    media_list.append(media.media_url_https)
+                tweet.media = ', '.join(media_list)
+
 
     def get_only_interesting_attributes(self):
         """Isolates just the interesting attributes of the tweets."""
@@ -69,6 +78,8 @@ class RecordsHandler(object):
             self.format_hashtags()
         if 'urls' in self.interesting_attributes:
             self.format_urls()
+        if 'media' in self.interesting_attributes:
+            self.format_media()
         logging.debug('Getting attributes: {}'
                      .format(self.interesting_attributes))
         records = [{key: getattr(tweet, key)
