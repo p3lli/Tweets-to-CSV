@@ -24,9 +24,14 @@ class CSVFileHandler(object):
     def name_csv_file(self):
         """Names the CSV file based on query. No file extension."""
         preposition = 'with'
-        if self.search_type == 'by-user':
-            preposition = 'by'
-        return '_'.join(['tweets', preposition, self.query_word])
+        if self.search_type not in ['by-keywords-list', 'by-users-list']:
+            if self.search_type == 'by-user':
+                preposition = 'by'
+            return '_'.join(['tweets', preposition, self.query_word])
+        else:
+            preposition = 'from'
+            filename_without_extension = self.query_word.split('.')[0]
+            return '_'.join(['tweets', preposition, filename_without_extension])
 
     def name_csv_file_with_timestamp(self):
         """Names the CSV file based on timestamp and query. No file extension."""

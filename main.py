@@ -28,13 +28,17 @@ def get_parser():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=RawTextHelpFormatter)
     parser.add_argument('search_type', metavar='search_type', type=str,
-            choices=['by-keyword', 'by-user'],
+            choices=['by-keyword', 'by-user', 'by-keywords-list', 'by-users-list'],
             help='Specifies the type of search to be performed.\n'
             + 'Values accepted:\n'
             + '-\'by-keyword\'\n'
-            + '-\'by-user\'\n')
+            + '-\'by-user\'\n'
+            + '-\'by-keywords-list\'\n'
+            + '-\'by-users-list\'\n')
     parser.add_argument('query_word', metavar='query_word', type=str,
-            help='A keyword or a username to be used in the search.')
+            help='A keyword or a username to be used in the search.\n'
+            + 'If selecting \'by-keywords-list\' or \'by-users-list\', \n'
+            + '\'query_word\' must be a text file like \'keywords_list.txt\'.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
     parser.add_argument('-a', '--append', dest='append_to', action='store_true',

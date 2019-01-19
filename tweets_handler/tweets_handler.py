@@ -2,6 +2,7 @@ import logging
 import configparser
 import twitter
 import constants as const
+import os.path
 
 
 class ApiHandler(object):
@@ -44,6 +45,45 @@ class ApiHandler(object):
                                            count=const.MAX_COUNT_USER,
                                            exclude_replies=const.EXCLUDE_REPLIES)
         return results
+
+
+    def get_tweets_by_list_of_keywords(self):
+        """Gets tweets based on list of keywords."""
+        logging.debug('Getting tweets with keywords from file: {}'
+                .format(self.query_word))
+        query_words = self.read_list_from_file()
+        list_results = []
+        for query_word in query_words:
+            results = self.api.GetSearch(term=query_word,
+                                         count=const.MAX_COUNT_KEYWORD,
+                                         include_entities=const.INCLUDE_ENTITIES)
+            list_results.extend(results)
+        return list_results
+
+
+    def get_tweets_by_list_of_users(self):
+        """Gets tweets based on list of users."""
+        logging.debug('Getting tweets by users from file: {}'
+                .format(self.query_word))
+        query_words = self.read_list_from_file()
+        list_results = []
+        for query_word in query_words:
+            results = self.api.GetUserTimeline(screen_name=query_word,
+                                               count=const.MAX_COUNT_USER,
+                                               exclude_replies=const.EXCLUDE_REPLIES)
+            list_results.extend(results)
+        return list_results
+
+
+    def read_list_from_file(self):
+        query_words = []
+        if os.path.isfile(self.query_word):
+            logging.info('Reading query words from {}'.format(self.query_word))
+            query_words = [line.rstrip('\n') for line in open(self.query_word)]
+            logging.debug('Query words are: {}'.format(', '.join(query_words)))
+        else:
+            logging.warn('{} is not a file'.format(self.query_word))
+        return query_words
 
 
     def get_tweets(self):

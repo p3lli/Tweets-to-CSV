@@ -99,12 +99,17 @@ positional arguments:
                  Values accepted:
                  -'by-keyword'
                  -'by-user'
+                 -'by-keywords-list'
+                 -'by-users-list'
   query_word     A keyword or a username to be used in the search.
+                 If selecting 'by-keywords-list' or 'by-users-list',
+                 'query_word' must be a text file like 'keywords_list.txt'.
   out_dir        Directory where the CSV file will be saved.
 
-  optional arguments:
-    -h, --help     show this help message and exit
-    -a, --append   Appends tweets to a compatible CSV (same search, different time).
-    -v, --verbose  Increases log verbosity.
+optional arguments:
+  -h, --help     show this help message and exit
+  -a, --append   Appends tweets to a compatible CSV (same search, different time).
+  -v, --verbose  Increases log verbosity.
+
 
 ```
