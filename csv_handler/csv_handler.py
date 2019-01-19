@@ -51,12 +51,15 @@ class CSVFileHandler(object):
             if self.append_to == True:
                 prefix = self.name_csv_file()
                 csv_files = self.get_list_of_csv_file_in_out_dir_with_prefix(prefix)
-                filename = csv_files[0]
-                logging.debug('Appending to CSV file \'{}\'...'.format(filename))
-                existing_dataframe = pd.read_csv(filename,
-                                                 sep=const.CSV_SEPARATOR)
-                dataframe = dataframe.append(existing_dataframe)
-                dataframe.drop_duplicates(inplace=True, subset=['created_at', 'user'])
+                if len(csv_files) > 0:
+                    filename = csv_files[0]
+                    logging.debug('Appending to CSV file \'{}\'...'.format(filename))
+                    existing_dataframe = pd.read_csv(filename,
+                                                     sep=const.CSV_SEPARATOR)
+                    dataframe = dataframe.append(existing_dataframe)
+                    dataframe.drop_duplicates(inplace=True, subset=['created_at', 'user'])
+                else:
+                    logging.debug('No previous CSV file found')
             dataframe.sort_values(const.CSV_SORTED_BY, inplace=True)
             dataframe.to_csv(filename,
                              index=False,
