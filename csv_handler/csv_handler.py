@@ -33,6 +33,7 @@ class CSVFileHandler(object):
             filename_without_extension = self.query_word.split('.')[0]
             return '_'.join(['tweets', preposition, filename_without_extension])
 
+
     def name_csv_file_with_timestamp(self):
         """Names the CSV file based on timestamp and query. No file extension."""
         timestamp = datetime.datetime.today().strftime('%Y%m%d_%H%M%S')
@@ -40,12 +41,14 @@ class CSVFileHandler(object):
         filename = '_'.join([header, timestamp])
         return '/'.join([self.out_dir, filename])
 
+
     def get_list_of_csv_file_in_out_dir_with_prefix(self, prefix):
         """Returns a list of CSV file starting with the substring 'prefix'"""
         files = os.listdir(self.out_dir)
         files.sort()
         files.reverse()
         return [f for f in files if f.startswith(prefix) and f.endswith('.csv')]
+
 
     def export_csv(self):
         """Exports CSV file."""
