@@ -36,7 +36,9 @@ class RecordsHandler(object):
         """Formats 'text' attribute."""
         for tweet in self.tweets:
             if tweet is not None and tweet.text is not None:
+                tweet.text = tweet.text.replace('\r\n', ' ')
                 tweet.text = tweet.text.replace('\n', ' ')
+                tweet.text = tweet.text.replace('\r', ' ')
                 tweet.text = tweet.text.replace(',', '')
 
 
@@ -44,7 +46,9 @@ class RecordsHandler(object):
         """Formats 'full_text' attribute."""
         for tweet in self.tweets:
             if tweet is not None and tweet.text is not None:
+                tweet.full_text = tweet.full_text.replace('\r\n', ' ')
                 tweet.full_text = tweet.full_text.replace('\n', ' ')
+                tweet.full_text = tweet.full_text.replace('\r', '')
                 tweet.full_text = tweet.full_text.replace(',', '')
 
 
@@ -64,6 +68,7 @@ class RecordsHandler(object):
             for url in tweet.urls:
                 urls_list.append(url.expanded_url)
             tweet.urls = ', '.join(urls_list)
+
 
     def format_media(self):
         """Formats 'media' attribute."""
