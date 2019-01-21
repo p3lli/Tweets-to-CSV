@@ -109,7 +109,8 @@ positional arguments:
 optional arguments:
   -h, --help     show this help message and exit
   -a, --append   Appends tweets to a compatible CSV (same search, different time).
-  -c, --clean    Cleans tweets texts from emoji, smiley, url and mentions.
+  -c, --clean    Adds a custom column 'cleaned_text' in which text is cleaned
+                 by emoji, smiley, url and mentions.
   -v, --verbose  Increases log verbosity.
 
 
