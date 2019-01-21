@@ -2,6 +2,8 @@ import configparser
 import time
 import datetime
 import logging
+import preprocessor as prep
+import html
 import constants as const
 
 
@@ -9,8 +11,9 @@ class RecordsHandler(object):
     """Handles collection of tweets as records for the CSV file."""
 
 
-    def __init__(self, tweets):
+    def __init__(self, tweets, clean_flag):
         self.tweets = tweets
+        self.clean_flag = clean_flag
         config = configparser.ConfigParser()
         config.read(const.ATTR_FILE_INI)
         config_attributes = config['interesting-attributes']['attrs']
@@ -32,6 +35,15 @@ class RecordsHandler(object):
                                              tuple_timestamp)
 
 
+    def preprocess_tweet_text(self, text):
+        """Cleans tweet text using 'tweet-preprocessor' module"""
+        prep.set_options(prep.OPT.URL, prep.OPT.EMOJI, prep.OPT.MENTION, prep.OPT.SMILEY)
+        text = prep.clean(text)
+        text = text.replace('#', '')
+        text = text.replace('RT : ', '')
+        return text
+
+
     def format_text(self):
         """Formats 'text' attribute."""
         for tweet in self.tweets:
@@ -45,11 +57,22 @@ class RecordsHandler(object):
     def format_full_text(self):
         """Formats 'full_text' attribute."""
         for tweet in self.tweets:
-            if tweet is not None and tweet.text is not None:
+            if tweet is not None and tweet.full_text is not None:
                 tweet.full_text = tweet.full_text.replace('\r\n', ' ')
                 tweet.full_text = tweet.full_text.replace('\n', ' ')
                 tweet.full_text = tweet.full_text.replace('\r', '')
                 tweet.full_text = tweet.full_text.replace(',', '')
+
+
+    def format_cleaned_text(self):
+        """Cleans 'full_text' attribute and adds 'cleaned_text' attribute."""
+        for tweet in self.tweets:
+            if tweet is not None and tweet.full_text is not None:
+                tweet.cleaned_text = tweet.full_text.replace('\r\n', ' ')
+                tweet.cleaned_text = tweet.cleaned_text.replace('\n', ' ')
+                tweet.cleaned_text = tweet.cleaned_text.replace('\r', '')
+                tweet.cleaned_text = tweet.cleaned_text.replace(',', '')
+                tweet.cleaned_text = self.preprocess_tweet_text(tweet.cleaned_text.encode('utf-8'))
 
 
     def format_hashtags(self):
@@ -88,6 +111,11 @@ class RecordsHandler(object):
             self.convert_timestamp_created_at()
         if 'text' in self.interesting_attributes:
             self.format_text()
+        if 'full_text' in self.interesting_attributes:
+            self.format_full_text()
+            if self.clean_flag:
+                self.format_cleaned_text()
+                self.interesting_attributes.append('cleaned_text')
         if 'hashtags' in self.interesting_attributes:
             self.format_hashtags()
         if 'urls' in self.interesting_attributes:

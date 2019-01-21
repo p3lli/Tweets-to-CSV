@@ -17,7 +17,7 @@ class CSVFileHandler(object):
         self.search_type = args.search_type
         self.out_dir = args.out_dir
         self.append_to = args.append_to
-        self.records_handler = RecordsHandler(tweets)
+        self.records_handler = RecordsHandler(tweets, args.clean)
         self.records = self.records_handler.get_only_interesting_attributes()
 
 

@@ -43,6 +43,8 @@ def get_parser():
             help='Directory where the CSV file will be saved.')
     parser.add_argument('-a', '--append', dest='append_to', action='store_true',
             help='Appends tweets to a compatible CSV (same search, different time).')
+    parser.add_argument('-c', '--clean', dest='clean', action='store_true',
+            help='Cleans tweets texts from emoji, smiley, url and mentions.')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
             help='Increases log verbosity.')
     return parser

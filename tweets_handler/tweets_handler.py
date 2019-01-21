@@ -24,7 +24,8 @@ class ApiHandler(object):
                 consumer_secret=credentials['consumer_secret'],
                 access_token_key=credentials['access_token_key'],
                 access_token_secret=credentials['access_token_secret'],
-                tweet_mode='extended')
+                tweet_mode='extended',
+                input_encoding='utf8')
         return api
 
 
