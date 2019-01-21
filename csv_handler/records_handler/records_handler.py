@@ -35,8 +35,17 @@ class RecordsHandler(object):
     def format_text(self):
         """Formats 'text' attribute."""
         for tweet in self.tweets:
-            tweet.text = tweet.text.replace('\n', ' ')
-            tweet.text = tweet.text.replace(',', '')
+            if tweet is not None and tweet.text is not None:
+                tweet.text = tweet.text.replace('\n', ' ')
+                tweet.text = tweet.text.replace(',', '')
+
+
+    def format_full_text(self):
+        """Formats 'full_text' attribute."""
+        for tweet in self.tweets:
+            if tweet is not None and tweet.text is not None:
+                tweet.full_text = tweet.full_text.replace('\n', ' ')
+                tweet.full_text = tweet.full_text.replace(',', '')
 
 
     def format_hashtags(self):

@@ -23,7 +23,8 @@ class ApiHandler(object):
         api = twitter.Api(consumer_key=credentials['consumer_key'],
                 consumer_secret=credentials['consumer_secret'],
                 access_token_key=credentials['access_token_key'],
-                access_token_secret=credentials['access_token_secret'])
+                access_token_secret=credentials['access_token_secret'],
+                tweet_mode='extended')
         return api
 
 
