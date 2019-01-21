@@ -23,7 +23,7 @@ For a complete list of the attributes associated to a tweet, visit the [document
 You can set the attributes to be exported in `csv_handler/resources/interesting_attributes.ini`.  
 At the moment, the following attributes are guaranteed to be supported:  
 * `created_at`
-* `text`
+* `full_text`
 * `user`
 
 ## Initialization
