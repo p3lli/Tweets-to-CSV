@@ -5,8 +5,8 @@ At the moment, tweets are gathered based on keywords or directly from a specific
 
 ## Config file (.ini)
 ### Twitter API
-The project uses [python-twitter](https://github.com/bear/python-twitter) to connect with the Twitter API.  
-To run the project, you must first obtain all the API credentials, using a Twitter Account.  
+The project uses [python-twitter](https://github.com/bear/python-twitter) module to connect with the Twitter API.  
+To run the project, you must first obtain all the API credentials, using a valid Twitter Account.  
 Follow the instructions at [https://apps.twitter.com/](https://apps.twitter.com/) to get:  
 
 * A Consumer Key
@@ -25,6 +25,11 @@ At the moment, the following attributes are guaranteed to be supported:
 * `created_at`
 * `full_text`
 * `user`
+* `favorite_count`
+* `retweet_count`
+* `hashtags`
+* `urls`
+* `geo`
 
 ## Initialization
 To initialize the project, create a virtual environment with `virtualenv`
@@ -40,14 +45,19 @@ brew install python
 pip install virtualenv
 ```
 
-After the installation, change directory to the project directory and execute  
+After the installation, change directory to the project directory:  
 ```
-virtualenv env-twi
+cd  /path/to/Tweets-to-CSV
+```
+
+and execute:  
+```
+virtualenv --python=/path/to/python2 env-twi
 ```
 
 Now, activate the virtual environment:  
 ```
-source ./env-twi/bin/activate
+source env-twi/bin/activate
 ```
 
 Then install the required modules:  
