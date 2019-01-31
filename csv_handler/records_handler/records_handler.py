@@ -92,6 +92,15 @@ class RecordsHandler(object):
                 urls_list.append(url.expanded_url)
             tweet.urls = ', '.join(urls_list)
 
+    def format_geo(self):
+        """Formats 'geo' attribute. Creates attributes 'lat' and 'lon'"""
+        for tweet in self.tweets:
+            if tweet.geo is not None:
+                tweet.lat = tweet.geo['coordinates'][0]
+                tweet.lon = tweet.geo['coordinates'][1]
+            else:
+                tweet.lat = None
+                tweet.lon = None
 
     def format_media(self):
         """Formats 'media' attribute."""
@@ -122,6 +131,11 @@ class RecordsHandler(object):
             self.format_urls()
         if 'media' in self.interesting_attributes:
             self.format_media()
+        if 'geo' in self.interesting_attributes:
+            self.format_geo()
+            self.interesting_attributes.remove('geo')
+            self.interesting_attributes.append('lat')
+            self.interesting_attributes.append('lon')
         logging.debug('Getting attributes: {}'
                      .format(self.interesting_attributes))
         records = [{key: getattr(tweet, key)
