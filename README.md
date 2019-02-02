@@ -55,7 +55,9 @@ and execute:
 virtualenv --python=/path/to/python2 env-twi
 ```
 
-Now, activate the virtual environment:  
+Execute `which python2` to obtain `/path/to/python2`.  
+
+Now, activate the virtual environment inside the project directory:  
 ```
 source env-twi/bin/activate
 ```
