@@ -3,6 +3,12 @@
 This small project has been made to collect tweets using Twitter API and then store them in a CSV file.  
 At the moment, tweets are gathered based on keywords or directly from a specific account.  
 
+## Preface
+I do realize that the script has been used more extensively by _non computer scientists_.  
+Because of that, I am trying to be more explanatory and _verbose_ in this README.  
+Please, give me any feedback to improve clearness and correctness of this part.  
+Thank you  
+
 ## Config file (.ini)
 ### Twitter API
 The project uses [python-twitter](https://github.com/bear/python-twitter) module to connect with the Twitter API.  
