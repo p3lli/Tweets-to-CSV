@@ -58,10 +58,8 @@ cd  /path/to/Tweets-to-CSV
 
 and execute:  
 ```
-virtualenv --python=/path/to/python2 env-twi
+virtualenv --python=$(which python2) env-twi
 ```
-
-Execute `which python2` to obtain `/path/to/python2`.  
 
 Now, activate the virtual environment inside the project directory:  
 ```
