@@ -10,7 +10,13 @@ from utils import validate_args
 
 
 def main(args):
-    """Main entry point for the script."""
+    """Main entry point for the script.
+
+    - Validation of the arguments.
+    - First communication with the Twitter API using the credentials.
+    - Retrieving of the tweets as a list of `twitter.Status` objects.
+    - Processing of the tweets and transformation to a list of dictionaries.
+    - CSV file export."""
     logging.info('Starting script'.format(args.query_word))
     logging.debug('Input parameters: \'{}\', \'{}\', \'{}\''
                   .format(args.search_type, args.query_word, args.out_dir))

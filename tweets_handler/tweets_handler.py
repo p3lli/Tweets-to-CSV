@@ -6,17 +6,48 @@ import os.path
 
 
 class ApiHandler(object):
-    """Class that handles all the Twitter API comunication."""
+    """Class that handles all the Twitter API comunication.
+    It uses `python-twitter` module to retrieve tweets by user or by keyword.
+    API keys must be stored in `CRED_FILE_INI` file.
+    The main method is `get_tweets(self)` which calls `GetSearch` or
+    `GetUserTimeline` methods from `python-twitter` module to retrieve tweets
+    based on the `search_type` value.
+
+    Attributes:
+    -----------
+    - `query_word`: word or username to be searched. It can also be the name of
+      the file containing the list of keywords or usernames to be searched.
+    - `search_type`: type of search (`by-user`, `by-keyword`, `by-users-list`,
+      `by-keywords-list`).
+    - `api`: `twitter.API` wrapper object which deals with the communication to
+      the Twitter API.
+
+    Methods:
+    --------
+    - `get_credentials(self)`: gets credentials from `CRED_FILE_INI`.
+    - `get_tweets_by_keyword(self)`: gets tweets based on keyword.
+    - `get_tweets_by_user(self)`: gets tweets based on user name.
+    - `get_tweets_by_list_of_keywords(self)`: gets tweets based on a list of keywords.
+    - `get_tweets_by_list_of_users(self)`: gets tweets based on a list of users.
+    - `read_list_from_file(self)`: reads list of keyword or users from a text file.
+    - `get_tweets(self)`: gets tweets based on keyword or username."""
 
 
     def __init__(self, query_word, search_type):
+        """Initializes ApiHandler
+
+        Parameters:
+        -----------
+        - `query_word`: word or username to be searched
+        - `search_type`: type of search (by user or by keyword)"""
         self.query_word = query_word
         self.search_type = search_type
         self.api = self.get_credentials()
 
 
     def get_credentials(self):
-        """Get credentials from CRED_FILE_INI."""
+        """Gets credentials from `CRED_FILE_INI`. Returns a `twitter.API` wrapper
+        object which deals with the communication to the Twitter API."""
         config = configparser.ConfigParser()
         config.read(const.CRED_FILE_INI)
         credentials = config['twitter-api']
@@ -78,6 +109,7 @@ class ApiHandler(object):
 
 
     def read_list_from_file(self):
+        """Reads list of keyword or users from a text file."""
         query_words = []
         if os.path.isfile(self.query_word):
             logging.info('Reading query words from {}'.format(self.query_word))
@@ -89,5 +121,6 @@ class ApiHandler(object):
 
 
     def get_tweets(self):
-        """Gets tweets based on keywords or username."""
+        """Gets tweets based on keywords or username. Returns a list of
+        `tweet.Status` object representing the retrieved tweets."""
         return eval(const.GET_TWEETS_BY[self.search_type])

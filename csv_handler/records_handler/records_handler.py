@@ -8,10 +8,47 @@ import constants as const
 
 
 class RecordsHandler(object):
-    """Handles collection of tweets as records for the CSV file."""
+    """Handles collection of tweets as records for the CSV file.
+    Methods deal with processing and formatting tweet attributes before they
+    are stored in the .csv file columns. The list of the .csv columns is
+    defined in the attribute `interesting_attributes`.
+
+    Attributes:
+    -----------
+    - `tweets`: a list of `twitter.Status` objects, each representing a single tweet.
+    - `clean_flag`: boolean flag, if True it will add a column `cleaned_text`
+      to them .csv file. `cleaned_text` column represents `full_text` without
+      urls, hashtags or usernames.
+    - `interesting_attributes`: list of strings representing the tweets attributes
+      to save in the .csv. The list is read from `ATTR_FILE_INI`.
+
+    Methods:
+    --------
+    - `extract_user_name(self)`: extracts the screen name from the object User.
+    - `convert_timestamp_created_at(self)`: converts `created_at` attribute
+      in a proper timestamp.
+    - `preprocess_tweet_text(self, text)`: cleans tweet text.
+    - `format_text(self)`: formats `text` attribute.
+    - `format_full_text(self)`: formats `full_text` attribute.
+    - `format_cleaned_text(self)`: formats `cleaned_text` attribute.
+    - `format_hashtags(self)`: formats `hashtags` attribute.
+    - `format_geo(self)`: formats `geo` attribute.
+    - `format_media(self)`: formats `media` attribute.
+    - `get_only_interesting_attributes(self)`: returns a list of dictionaries
+      representing the tweets; only the tweet attributes defined in `interesting_attributes`
+      are stored in the dictionaries.
+    """
 
 
     def __init__(self, tweets, clean_flag):
+        """Initializes RecordsHandler
+
+        Parameters:
+        -----------
+        - `tweets`: a list of `twitter.Status` objects, each representing a single tweet.
+        - `clean_flag`: boolean flag, if True it will add a column `cleaned_text`
+                    to them .csv file. `cleaned_text` column represents
+                    `full_text` without urls, hashtags or usernames."""
         self.tweets = tweets
         self.clean_flag = clean_flag
         config = configparser.ConfigParser()
@@ -27,7 +64,7 @@ class RecordsHandler(object):
 
 
     def convert_timestamp_created_at(self):
-        """Converts 'created_at' attribute in timestamp."""
+        """Converts `created_at` attribute in timestamp."""
         for tweet in self.tweets:
             tuple_timestamp = time.strptime(tweet.created_at,
                                             const.CREATED_AT_OLD_FORMAT)
@@ -36,7 +73,9 @@ class RecordsHandler(object):
 
 
     def preprocess_tweet_text(self, text):
-        """Cleans tweet text using 'tweet-preprocessor' module"""
+        """Cleans tweet text using `tweet-preprocessor` module.
+        At the moment, it removes url, hashtags, emoji, mentions and smileys
+        from the original `full_text`"""
         prep.set_options(prep.OPT.URL, prep.OPT.EMOJI, prep.OPT.MENTION, prep.OPT.SMILEY)
         text = prep.clean(text)
         text = text.replace('#', '')
@@ -45,7 +84,7 @@ class RecordsHandler(object):
 
 
     def format_text(self):
-        """Formats 'text' attribute."""
+        """Formats `text` attribute, removing newlines."""
         for tweet in self.tweets:
             if tweet is not None and tweet.text is not None:
                 tweet.text = tweet.text.replace('\r\n', ' ')
@@ -55,7 +94,7 @@ class RecordsHandler(object):
 
 
     def format_full_text(self):
-        """Formats 'full_text' attribute."""
+        """Formats `full_text` attribute, removing newlines."""
         for tweet in self.tweets:
             if tweet is not None and tweet.full_text is not None:
                 tweet.full_text = tweet.full_text.replace('\r\n', ' ')
@@ -65,7 +104,9 @@ class RecordsHandler(object):
 
 
     def format_cleaned_text(self):
-        """Cleans 'full_text' attribute and adds 'cleaned_text' attribute."""
+        """Cleans `full_text` attribute and adds `cleaned_text` attribute,
+        removing newlines and calling method `preprocess_tweet_text` on each
+        `tweet.full_text` string."""
         for tweet in self.tweets:
             if tweet is not None and tweet.full_text is not None:
                 tweet.cleaned_text = tweet.full_text.replace('\r\n', ' ')
@@ -76,7 +117,8 @@ class RecordsHandler(object):
 
 
     def format_hashtags(self):
-        """Formats 'hashtags' attribute."""
+        """Formats `hashtags` attribute, converting a list to a concatenation
+        of strings."""
         for tweet in self.tweets:
             hashtags_list = []
             for hashtag in tweet.hashtags:
@@ -85,7 +127,8 @@ class RecordsHandler(object):
 
 
     def format_urls(self):
-        """Formats 'urls' attribute."""
+        """Formats `urls` attribute, converting a list to a concatenation
+        of strings."""
         for tweet in self.tweets:
             urls_list = []
             for url in tweet.urls:
@@ -93,7 +136,7 @@ class RecordsHandler(object):
             tweet.urls = ', '.join(urls_list)
 
     def format_geo(self):
-        """Formats 'geo' attribute. Creates attributes 'lat' and 'lon'"""
+        """Formats `geo` attribute. Creates attributes 'lat' and 'lon'."""
         for tweet in self.tweets:
             if tweet.geo is not None:
                 tweet.lat = tweet.geo['coordinates'][0]
@@ -103,7 +146,8 @@ class RecordsHandler(object):
                 tweet.lon = None
 
     def format_media(self):
-        """Formats 'media' attribute."""
+        """Formats `media` attribute, converting a list to a concatenation
+        of strings."""
         for tweet in self.tweets:
             media_list = []
             if tweet.media and len(tweet.media) > 0:
@@ -113,7 +157,12 @@ class RecordsHandler(object):
 
 
     def get_only_interesting_attributes(self):
-        """Isolates just the interesting attributes of the tweets."""
+        """Isolates just the interesting attributes of the tweets.
+        Interesting attributes are defined in `ATTR_FILE_INI`.
+        If `clean_flag` is True, a custom column is added to
+        `interesting_attributes` called `cleaned_text`.
+        If `geo` is in `interesting_attributes`, two custom column are added to
+        `interesting_attributes` called `lat` and `lon`."""
         if 'user' in self.interesting_attributes:
             self.extract_user_name()
         if 'created_at' in self.interesting_attributes:

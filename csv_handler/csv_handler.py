@@ -9,10 +9,55 @@ from records_handler import RecordsHandler
 
 
 class CSVFileHandler(object):
-    """Handles the creation of the CSV file."""
+    """Handles the creation of the CSV file.
+    The main method is `export_csv()` which exports .csv file containing the
+    retrieved tweets. It uses `pandas` python module to deal with the creation
+    of the .csv file. The name of the file depends on the chosen search type:
+    - if `by-keyword` the filename will be something like `tweets_with_`;
+    - if `by-user` the filename will be something like `tweets_by_`;
+    - if `by-keywords-list` or `by-users-list` the filename will be something
+      like `tweets_from_`.
+
+    Attributes:
+    -----------
+    - `query_word`: word or username to be searched.
+    - `search_type`: type of search (by user or by keyword).
+    - `out_dir`: directory in which the .csv file will be created.
+    - `append_to`: boolean flag, if True new tweets will be stored in the most
+                 recent .csv file. If False, a new .csv file will be created.
+    - `clean`: boolean flag, if True it will add a column `cleaned_text` to them
+             .csv file. `cleaned_text` column represents `full_text` without
+             urls, hashtags or usernames.
+    - `recordsHandler`: a RecordsHandler object; it deals with the preprocessing
+      and formatting of the tweet attributes.
+    - `records`: a list of dictionaries representing the tweets.
+
+    Methods:
+    --------
+    - `name_csv_file(self)`: returns a string representing the .csv file name.
+    - `name_csv_file_with_timestamp(self)`: returns a string representing the .csv
+      file name with a timestamp.
+    - `get_list_of_csv_file_in_out_dir_with_prefix(self, prefix)`: returns a list
+      of .csv filenames in `out_dir` starting with the given `prefix`.
+    - `export_csv(self)`: creates the .csv file containing the retrieved tweets.
+    """
 
 
     def __init__(self, query_word, search_type, out_dir, append_to, clean, tweets):
+        """Initializes CSVFileHandler
+
+        Parameters:
+        -----------
+        - `query_word`: word or username to be searched
+        - `search_type`: type of search (by user or by keyword)
+        - `out_dir`: directory in which the .csv file will be created
+        - `append_to`: boolean flag, if True new tweets will be stored in the most
+                     recent .csv file. If False, a new .csv file will be created.
+        - `clean`: boolean flag, if True it will add a column `cleaned_text` to them
+                 .csv file. `cleaned_text` column represents `full_text` without
+                 urls, hashtags or usernames.
+        - `tweets`: a list of `Status` object from `python-twitter` module,
+          each representing a single tweet."""
         self.query_word = query_word.replace(' ', '_')
         self.search_type = search_type
         self.out_dir = out_dir
