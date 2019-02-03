@@ -2,6 +2,7 @@ import configparser
 import time
 import datetime
 import logging
+import re
 import preprocessor as prep
 import html
 import constants as const
@@ -78,6 +79,7 @@ class RecordsHandler(object):
         from the original `full_text`"""
         prep.set_options(prep.OPT.URL, prep.OPT.EMOJI, prep.OPT.MENTION, prep.OPT.SMILEY)
         text = prep.clean(text)
+        text = ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", text).split())
         text = text.replace('#', '')
         text = text.replace('RT : ', '')
         return text
