@@ -17,7 +17,9 @@ def main(args):
     if validate_args(args):
         api_handler = ApiHandler(args.query_word, args.search_type)
         tweets = api_handler.get_tweets()
-        csv_handler = CSVFileHandler(args, tweets)
+        csv_handler = CSVFileHandler(args.query_word, args.search_type,
+                                    args.out_dir, args.append_to, args.clean,
+                                    tweets)
         csv_handler.export_csv()
     else:
         logging.info('Script stopped')

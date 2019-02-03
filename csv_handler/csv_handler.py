@@ -12,12 +12,12 @@ class CSVFileHandler(object):
     """Handles the creation of the CSV file."""
 
 
-    def __init__(self, args, tweets):
-        self.query_word = args.query_word.replace(' ', '_')
-        self.search_type = args.search_type
-        self.out_dir = args.out_dir
-        self.append_to = args.append_to
-        self.records_handler = RecordsHandler(tweets, args.clean)
+    def __init__(self, query_word, search_type, out_dir, append_to, clean, tweets):
+        self.query_word = query_word.replace(' ', '_')
+        self.search_type = search_type
+        self.out_dir = out_dir
+        self.append_to = append_to
+        self.records_handler = RecordsHandler(tweets, clean)
         self.records = self.records_handler.get_only_interesting_attributes()
 
 
