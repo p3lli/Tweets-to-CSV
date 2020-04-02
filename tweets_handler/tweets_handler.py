@@ -33,15 +33,20 @@ class ApiHandler(object):
     - `get_tweets(self)`: gets tweets based on keyword or username."""
 
 
-    def __init__(self, query_word, search_type):
+    def __init__(self, query_word, search_type, number_of_tweets):
         """Initializes ApiHandler
 
         Parameters:
         -----------
         - `query_word`: word or username to be searched
-        - `search_type`: type of search (by user or by keyword)"""
+        - `search_type`: type of search (by user or by keyword)
+        - `number_of_tweets`: maximum number of tweets to be retrieved"""
         self.query_word = query_word
         self.search_type = search_type
+        if number_of_tweets:
+            self.number_of_tweets = number_of_tweets
+        else:
+            self.number_of_tweets = const.MAX_NUMBER_OF_TWEETS
         self.api = self.get_credentials()
 
 
@@ -65,7 +70,7 @@ class ApiHandler(object):
         logging.debug('Getting tweets with keyword(s): {}'
                 .format(self.query_word))
         results = self.api.GetSearch(term=self.query_word,
-                                     count=const.MAX_COUNT_KEYWORD,
+                                     count=self.number_of_tweets,
                                      include_entities=const.INCLUDE_ENTITIES)
         return results
 
@@ -75,7 +80,7 @@ class ApiHandler(object):
         logging.debug('Getting tweets from user: {}'
                 .format(self.query_word))
         results = self.api.GetUserTimeline(screen_name=self.query_word,
-                                           count=const.MAX_COUNT_USER,
+                                           count=self.number_of_tweets,
                                            exclude_replies=const.EXCLUDE_REPLIES)
         return results
 
@@ -88,7 +93,7 @@ class ApiHandler(object):
         list_results = []
         for query_word in query_words:
             results = self.api.GetSearch(term=query_word,
-                                         count=const.MAX_COUNT_KEYWORD,
+                                         count=self.number_of_tweets,
                                          include_entities=const.INCLUDE_ENTITIES)
             list_results.extend(results)
         return list_results

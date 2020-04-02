@@ -21,7 +21,7 @@ def main(args):
     logging.debug('Input parameters: \'{}\', \'{}\', \'{}\''
                   .format(args.search_type, args.query_word, args.out_dir))
     if validate_args(args):
-        api_handler = ApiHandler(args.query_word, args.search_type)
+        api_handler = ApiHandler(args.query_word, args.search_type, args.ntweets)
         tweets = api_handler.get_tweets()
         csv_handler = CSVFileHandler(args.query_word, args.search_type,
                                     args.out_dir, args.append_to, args.clean,
@@ -49,6 +49,8 @@ def get_parser():
             + '\'query_word\' must be a text file like \'keywords_list.txt\'.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
+    parser.add_argument('-n', '--number-of-tweets', dest='ntweets',
+            help='Set the amount of tweets to be retrieved')
     parser.add_argument('-a', '--append', dest='append_to', action='store_true',
             help='Appends tweets to a compatible CSV (same search, different time).')
     parser.add_argument('-c', '--clean', dest='clean', action='store_true',
