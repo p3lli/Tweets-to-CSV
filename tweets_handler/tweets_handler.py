@@ -105,7 +105,7 @@ class ApiHandler(object):
                                              count=self.number_of_tweets,
                                              include_entities=const.INCLUDE_ENTITIES)
                 list_results.extend(results)
-            except Exception e:
+            except Exception, e:
                 logging.warning('A problem occurred for keyword "{}": {}'
                         .format(query_word, str(e)))
         return list_results
