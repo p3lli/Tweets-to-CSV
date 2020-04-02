@@ -118,7 +118,7 @@ class ApiHandler(object):
         query_words = []
         if os.path.isfile(self.query_word):
             logging.info('Reading query words from {}'.format(self.query_word))
-            query_words = [line.rstrip('\n') for line in open(self.query_word)]
+            query_words = [line.rstrip('\n') for line in open(self.query_word) if line != '\n']
             logging.debug('Query words are: {}'.format(', '.join(query_words)))
         else:
             logging.warn('{} is not a file'.format(self.query_word))
