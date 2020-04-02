@@ -20,6 +20,10 @@ def validate_args(args):
         valid_args = False
         logging.error('ERROR: \'{}\' is not a valid value for --number-of-tweets'
                 .format(args.ntweets))
+    if args.nseconds and (not args.nseconds.isdigit() or args.nseconds < 0):
+        valid_args = False
+        logging.error('ERROR: \'{}\' is not a valid value for --repeat-every'
+                .format(args.nseconds))
     if valid_args:
         logging.debug('Input parameters has been validated')
     return valid_args

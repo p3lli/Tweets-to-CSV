@@ -123,10 +123,12 @@ positional arguments:
   out_dir        Directory where the CSV file will be saved.
 
 optional arguments:
-  -h, --help     show this help message and exit
+  -h, --help     show this help message and exit.
   -n NTWEETS, --number-of-tweets NTWEETS
-                 Set the amount of tweets to be retrieved
+                 Set the amount of tweets to be retrieved.
   -a, --append   Appends tweets to a compatible CSV (same search, different time).
+  -r NSECONDS, --repeat-every NSECONDS
+                 Repeats the same search every NSECONDS
   -c, --clean    Adds a custom column 'cleaned_text' in which text is cleaned
                  by emoji, smiley, url and mentions.
   -v, --verbose  Increases log verbosity.

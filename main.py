@@ -3,6 +3,7 @@ import sys
 import os
 import logging
 import argparse
+import time
 from argparse import RawTextHelpFormatter
 from tweets_handler import ApiHandler
 from csv_handler import CSVFileHandler
@@ -18,18 +19,28 @@ def main(args):
     - Processing of the tweets and transformation to a list of dictionaries.
     - CSV file export."""
     logging.info('Starting script'.format(args.query_word))
-    logging.debug('Input parameters: \'{}\', \'{}\', \'{}\''
-                  .format(args.search_type, args.query_word, args.out_dir))
+    logging.debug('Input parameters: \'{}\''.format(repr(args)))
     if validate_args(args):
-        api_handler = ApiHandler(args.query_word, args.search_type, args.ntweets)
-        tweets = api_handler.get_tweets()
-        csv_handler = CSVFileHandler(args.query_word, args.search_type,
-                                    args.out_dir, args.append_to, args.clean,
-                                    tweets)
-        csv_handler.export_csv()
+        main_loop(args)
     else:
         logging.info('Script stopped')
 
+
+def main_loop(args):
+    api_handler = ApiHandler(args.query_word, args.search_type, args.ntweets)
+    while args.nseconds:
+        retrieve_and_store_tweets(args, api_handler)
+        logging.info('Waiting {} seconds for next search...'.format(args.nseconds))
+        time.sleep(float(args.nseconds))
+    retrieve_and_store_tweets(args, api_handler)
+
+
+def retrieve_and_store_tweets(args, api_handler):
+    tweets = api_handler.get_tweets()
+    csv_handler = CSVFileHandler(args.query_word, args.search_type,
+                                args.out_dir, args.append_to, args.clean,
+                                tweets)
+    csv_handler.export_csv()
 
 def get_parser():
     """Defines the parser object for argparse."""
@@ -53,6 +64,8 @@ def get_parser():
             help='Set the amount of tweets to be retrieved')
     parser.add_argument('-a', '--append', dest='append_to', action='store_true',
             help='Appends tweets to a compatible CSV (same search, different time).')
+    parser.add_argument('-r', '--repeat-every', dest='nseconds',
+            help='Repeats the same search every NSECONDS')
     parser.add_argument('-c', '--clean', dest='clean', action='store_true',
             help='Adds a custom column \'cleaned_text\' in which text is cleaned\n'
             + 'by emoji, smiley, url and mentions.')
