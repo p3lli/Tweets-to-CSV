@@ -107,7 +107,7 @@ class ApiHandler(object):
         list_results = []
         for query_word in query_words:
             results = self.api.GetUserTimeline(screen_name=query_word,
-                                               count=const.MAX_COUNT_USER,
+                                               count=self.number_of_tweets,
                                                exclude_replies=const.EXCLUDE_REPLIES)
             list_results.extend(results)
         return list_results
