@@ -69,9 +69,13 @@ class ApiHandler(object):
         """Gets tweets based on keyword."""
         logging.debug('Getting tweets with keyword(s): {}'
                 .format(self.query_word))
-        results = self.api.GetSearch(term=self.query_word,
-                                     count=self.number_of_tweets,
-                                     include_entities=const.INCLUDE_ENTITIES)
+        try:
+            results = self.api.GetSearch(term=self.query_word,
+                                         count=self.number_of_tweets,
+                                         include_entities=const.INCLUDE_ENTITIES)
+        except Exception, e:
+            logging.warning('A problem occurred for keyword "{}": {}'
+                    .format(self.query_word, str(e)))
         return results
 
 
@@ -79,9 +83,13 @@ class ApiHandler(object):
         """Gets tweets based on user name."""
         logging.debug('Getting tweets from user: {}'
                 .format(self.query_word))
-        results = self.api.GetUserTimeline(screen_name=self.query_word,
-                                           count=self.number_of_tweets,
-                                           exclude_replies=const.EXCLUDE_REPLIES)
+        try:
+            results = self.api.GetUserTimeline(screen_name=self.query_word,
+                                               count=self.number_of_tweets,
+                                               exclude_replies=const.EXCLUDE_REPLIES)
+        except Exception, e:
+            logging.warning('A problem occurred for screen name "{}": {}'
+                    .format(self.query_word, str(e)))
         return results
 
 
@@ -92,10 +100,14 @@ class ApiHandler(object):
         query_words = self.read_list_from_file()
         list_results = []
         for query_word in query_words:
-            results = self.api.GetSearch(term=query_word,
-                                         count=self.number_of_tweets,
-                                         include_entities=const.INCLUDE_ENTITIES)
-            list_results.extend(results)
+            try:
+                results = self.api.GetSearch(term=query_word,
+                                             count=self.number_of_tweets,
+                                             include_entities=const.INCLUDE_ENTITIES)
+                list_results.extend(results)
+            except Exception e:
+                logging.warning('A problem occurred for keyword "{}": {}'
+                        .format(query_word, str(e)))
         return list_results
 
 
@@ -106,10 +118,14 @@ class ApiHandler(object):
         query_words = self.read_list_from_file()
         list_results = []
         for query_word in query_words:
-            results = self.api.GetUserTimeline(screen_name=query_word,
-                                               count=self.number_of_tweets,
-                                               exclude_replies=const.EXCLUDE_REPLIES)
-            list_results.extend(results)
+            try:
+                results = self.api.GetUserTimeline(screen_name=query_word,
+                                                   count=self.number_of_tweets,
+                                                   exclude_replies=const.EXCLUDE_REPLIES)
+                list_results.extend(results)
+            except Exception, e:
+                logging.warning('A problem occurred for screen name "{}": {}'
+                        .format(query_word, str(e)))
         return list_results
 
 
