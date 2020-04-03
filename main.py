@@ -27,19 +27,18 @@ def main(args):
 
 
 def main_loop(args):
-    api_handler = ApiHandler(args.query_word, args.search_type, args.ntweets)
+    api_handler = ApiHandler(args)
     while args.nseconds:
         retrieve_and_store_tweets(args, api_handler)
         logging.info('Waiting {} seconds for next search...'.format(args.nseconds))
         time.sleep(float(args.nseconds))
+    # TODO add a more elegant way to interrupt the cycle (more than CTRL+C)
     retrieve_and_store_tweets(args, api_handler)
 
 
 def retrieve_and_store_tweets(args, api_handler):
     tweets = api_handler.get_tweets()
-    csv_handler = CSVFileHandler(args.query_word, args.search_type,
-                                args.out_dir, args.append_to, args.clean,
-                                tweets)
+    csv_handler = CSVFileHandler(args, tweets)
     csv_handler.export_csv()
 
 def get_parser():
@@ -73,13 +72,16 @@ def get_parser():
             help='Increases log verbosity.')
     return parser
 
-
-if __name__ == '__main__':
-    parser = get_parser()
-    args = parser.parse_args()
+def set_logging_level(args):
     logging_level = logging.INFO
     if args.verbose:
         logging_level = logging.DEBUG
     logging.basicConfig(level=logging_level,
             format='%(asctime)-15s %(message)s')
+
+
+if __name__ == '__main__':
+    parser = get_parser()
+    args = parser.parse_args()
+    set_logging_level(args)
     main(args)

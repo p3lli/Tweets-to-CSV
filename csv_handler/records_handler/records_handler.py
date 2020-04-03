@@ -41,22 +41,25 @@ class RecordsHandler(object):
     """
 
 
-    def __init__(self, tweets, clean_flag):
+    def __init__(self, tweets, args):
         """Initializes RecordsHandler
 
         Parameters:
         -----------
         - `tweets`: a list of `twitter.Status` objects, each representing a single tweet.
-        - `clean_flag`: boolean flag, if True it will add a column `cleaned_text`
-                    to them .csv file. `cleaned_text` column represents
-                    `full_text` without urls, hashtags or usernames."""
+        - `args`: argparse data structure; it must contains:
+            - `clean`: boolean flag, if True it will add a column `cleaned_text`
+                        to them .csv file. `cleaned_text` column represents
+                        `full_text` without urls, hashtags or usernames."""
         self.tweets = tweets
-        self.clean_flag = clean_flag
+        self.clean_flag = args.clean
+        self.interesting_attributes = self._extract_interesting_attributes_from_config()
+
+    def _extract_interesting_attributes_from_config(self):
         config = configparser.ConfigParser()
         config.read(const.ATTR_FILE_INI)
         config_attributes = config['interesting-attributes']['attrs']
-        self.interesting_attributes = config_attributes.split(',')
-
+        return config_attributes.split(',')
 
     def extract_user_name(self):
         """Extracts the screen name from the object User."""
