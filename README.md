@@ -95,6 +95,11 @@ Tweets-to-CSV
 │   │   │   └── records_handler.py
 │   │   └── resources
 │   │       └── interesting_attributes.ini
+│   ├── es_handler
+│   │   ├── es_handler.py
+│   │   └── __init__.py
+│   ├── __init__.py
+│   └── storage_handler.py
 │   ├── __init__.py
 │   └── storage_handler.py
 ├── tweets_handler

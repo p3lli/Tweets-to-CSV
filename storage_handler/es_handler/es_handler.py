@@ -7,4 +7,5 @@ class ElasticsearchHandler(object):
 
     def store(self):
         """Interface method for StorageHandler"""
+        # TODO
         return True
