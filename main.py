@@ -6,7 +6,7 @@ import argparse
 import time
 from argparse import RawTextHelpFormatter
 from tweets_handler import ApiHandler
-from csv_handler import CSVFileHandler
+from storage_handler import StorageHandler
 from utils import validate_args
 
 
@@ -38,8 +38,8 @@ def main_loop(args):
 
 def retrieve_and_store_tweets(args, api_handler):
     tweets = api_handler.get_tweets()
-    csv_handler = CSVFileHandler(args, tweets)
-    csv_handler.export_csv()
+    storage_handler = StorageHandler(args, tweets)
+    storage_handler.store()
 
 def get_parser():
     """Defines the parser object for argparse."""
@@ -59,6 +59,12 @@ def get_parser():
             + '\'query_word\' must be a text file like \'keywords_list.txt\'.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
+    parser.add_argument('-s', '--storage-type', dest='storage_type',
+            choices=['CSV'], default='CSV',
+            help='Specifies which type of storage to use.\n'
+            + 'Values accepted:\n'
+            + '-\'CSV\'\n'
+            + '-\'ES\'\n')
     parser.add_argument('-n', '--number-of-tweets', dest='ntweets',
             help='Set the amount of tweets to be retrieved')
     parser.add_argument('-a', '--append', dest='append_to', action='store_true',

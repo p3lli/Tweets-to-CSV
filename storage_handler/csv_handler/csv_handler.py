@@ -55,10 +55,10 @@ class CSVFileHandler(object):
             - `append_to`: boolean flag, if True new tweets will be stored in the most
                          recent .csv file. If False, a new .csv file will be created.
             - `clean`: boolean flag, if True it will add a column `cleaned_text` to them
-                     .csv file. `cleaned_text` column represents `full_text` without
-                     urls, hashtags or usernames.
+                       .csv file. `cleaned_text` column represents `full_text` without
+                       urls, hashtags or usernames.
         - `tweets`: a list of `Status` object from `python-twitter` module,
-          each representing a single tweet."""
+                    each representing a single tweet."""
         self.query_word = self._preprocessing_query_word(args.query_word)
         self.search_type = args.search_type
         self.out_dir = args.out_dir
@@ -66,9 +66,12 @@ class CSVFileHandler(object):
         self.records_handler = RecordsHandler(tweets, args)
         self.records = self.records_handler.get_only_interesting_attributes()
 
+    def store(self):
+        """Interface method for StorageHandler"""
+        self.export_csv()
+
     def _preprocessing_query_word(self, query_word):
         return query_word.replace(' ', '_')
-
 
     def name_csv_file(self):
         """Names the CSV file based on query. No file extension."""
