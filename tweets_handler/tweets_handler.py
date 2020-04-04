@@ -1,8 +1,7 @@
 import logging
-import configparser
-import twitter
 import constants as const
 import os.path
+from twitter_api_wrapper import TwitterApiHandler
 
 
 class ApiHandler(object):
@@ -44,34 +43,7 @@ class ApiHandler(object):
         if args:
             self.query_word = args.query_word
             self.search_type = args.search_type
-            self.number_of_tweets = self._set_number_of_tweets(args.ntweets)
-            self.api = self._get_credentials()
-
-
-    def _set_number_of_tweets(self, ntweets):
-            if ntweets:
-                return ntweets
-            else:
-                return const.MAX_NUMBER_OF_TWEETS
-
-
-    def _get_credentials(self):
-        """Gets credentials from `CRED_FILE_INI`. Returns a `twitter.API` wrapper
-        object which deals with the communication to the Twitter API."""
-        credentials = self._read_credentials_from_config_file()
-        api = twitter.Api(consumer_key=credentials['consumer_key'],
-                consumer_secret=credentials['consumer_secret'],
-                access_token_key=credentials['access_token_key'],
-                access_token_secret=credentials['access_token_secret'],
-                tweet_mode='extended',
-                input_encoding='utf8')
-        return api
-
-
-    def _read_credentials_from_config_file(self):
-        config = configparser.ConfigParser()
-        config.read(const.CRED_FILE_INI)
-        return config['twitter-api']
+            self.api = TwitterApiHandler(args.ntweets)
 
 
     def get_tweets(self):
@@ -84,8 +56,9 @@ class ApiHandler(object):
         """Gets tweets based on keyword."""
         logging.debug('Getting tweets with keyword(s): {}'
                 .format(self.query_word))
+        retults = []
         try:
-            results = self._retrieve_tweets_by_term(self.query_word)
+            results = self.api.retrieve_tweets_by_term(self.query_word)
         except Exception, e:
             logging.warning('A problem occurred for keyword "{}": {}'
                     .format(self.query_word, str(e)))
@@ -96,8 +69,9 @@ class ApiHandler(object):
         """Gets tweets based on user name."""
         logging.debug('Getting tweets from user: {}'
                 .format(self.query_word))
+        results = []
         try:
-            results = self._retrieve_tweets_by_screen_name(self.query_word)
+            results = self.api.retrieve_tweets_by_screen_name(self.query_word)
         except Exception, e:
             logging.warning('A problem occurred for screen name "{}": {}'
                     .format(self.query_word, str(e)))
@@ -112,7 +86,7 @@ class ApiHandler(object):
         list_results = []
         for query_word in query_words:
             try:
-                results = self._retrieve_tweets_by_term(query_word)
+                results = self.api.retrieve_tweets_by_term(query_word)
                 list_results.extend(results)
             except Exception, e:
                 logging.warning('A problem occurred for keyword "{}": {}'
@@ -128,24 +102,12 @@ class ApiHandler(object):
         list_results = []
         for query_word in query_words:
             try:
-                results = self._retrieve_tweets_by_screen_name(query_word)
+                results = self.api.retrieve_tweets_by_screen_name(query_word)
                 list_results.extend(results)
             except Exception, e:
                 logging.warning('A problem occurred for screen name "{}": {}'
                         .format(query_word, str(e)))
         return list_results
-
-
-    def _retrieve_tweets_by_term(self, query_word):
-        return self.api.GetSearch(term=query_word,
-                                 count=self.number_of_tweets,
-                                 include_entities=const.INCLUDE_ENTITIES)
-
-
-    def _retrieve_tweets_by_screen_name(self, screen_name):
-        return self.api.GetUserTimeline(screen_name=screen_name,
-                                       count=self.number_of_tweets,
-                                       exclude_replies=const.EXCLUDE_REPLIES)
 
 
     def read_list_from_file(self):

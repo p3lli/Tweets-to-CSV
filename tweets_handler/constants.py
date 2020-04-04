@@ -1,4 +1,5 @@
 """Constants for the package 'tweets_handler'"""
+TWITTER_API = 'python-twitter'
 CRED_FILE_INI = './tweets_handler/resources/twitter_api_credentials.ini' # path to twitter_api_credentials.ini
 HASHTAG_SYMBOL = '%23' # hashtag unicode symbol
 MAX_NUMBER_OF_TWEETS = 200 # max number of tweets retrieved

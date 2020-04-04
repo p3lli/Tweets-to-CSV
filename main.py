@@ -41,6 +41,7 @@ def retrieve_and_store_tweets(args, api_handler):
     storage_handler = StorageHandler(args, tweets)
     storage_handler.store()
 
+
 def get_parser():
     """Defines the parser object for argparse."""
     parser = argparse.ArgumentParser(description=__doc__,
