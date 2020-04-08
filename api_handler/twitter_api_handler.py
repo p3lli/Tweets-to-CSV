@@ -2,6 +2,7 @@ import logging
 import constants as const
 import os.path
 from twitter_api_wrapper import TwitterApiHandler
+from tweets_handler import TweetsHanlder
 
 
 class ApiHandler(object):
@@ -49,7 +50,9 @@ class ApiHandler(object):
     def get_tweets(self):
         """Gets tweets based on keywords or username. Returns a list of
         `tweet.Status` object representing the retrieved tweets."""
-        return eval(const.GET_TWEETS_BY[self.search_type])
+        results = eval(const.GET_TWEETS_BY[self.search_type])
+        tweets = TweetsHanlder.create_tweets_handler(results)
+        return tweets
 
 
     def get_tweets_by_keyword(self):

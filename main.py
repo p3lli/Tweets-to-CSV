@@ -5,7 +5,7 @@ import logging
 import argparse
 import time
 from argparse import RawTextHelpFormatter
-from tweets_handler import ApiHandler
+from api_handler import ApiHandler
 from storage_handler import StorageHandler
 from utils import validate_args
 
@@ -27,18 +27,18 @@ def main(args):
 
 
 def main_loop(args):
-    api_handler = ApiHandler(args)
+    twitter_api_handler = ApiHandler(args)
     while args.nseconds:
-        retrieve_and_store_tweets(args, api_handler)
+        retrieve_and_store_tweets(args, twitter_api_handler)
         logging.info('Waiting {} seconds for next search...'.format(args.nseconds))
         time.sleep(float(args.nseconds))
     # TODO add a more elegant way to interrupt the cycle (more than CTRL+C)
-    retrieve_and_store_tweets(args, api_handler)
+    retrieve_and_store_tweets(args, twitter_api_handler)
 
 
 def retrieve_and_store_tweets(args, api_handler):
-    tweets = api_handler.get_tweets()
-    storage_handler = StorageHandler(args, tweets)
+    tweets_handler = api_handler.get_tweets()
+    storage_handler = StorageHandler(args, tweets_handler)
     storage_handler.store()
 
 

@@ -43,7 +43,7 @@ class CSVFileHandler(object):
     """
 
 
-    def __init__(self, args, tweets):
+    def __init__(self, args, tweets_handler):
         """Initializes CSVFileHandler
 
         Parameters:
@@ -57,13 +57,12 @@ class CSVFileHandler(object):
             - `clean`: boolean flag, if True it will add a column `cleaned_text` to them
                        .csv file. `cleaned_text` column represents `full_text` without
                        urls, hashtags or usernames.
-        - `tweets`: a list of `Status` object from `python-twitter` module,
-                    each representing a single tweet."""
+        - `tweets_handler`: an object wrapping a list of tweet."""
         self.query_word = self._preprocessing_query_word(args.query_word)
         self.search_type = args.search_type
         self.out_dir = args.out_dir
         self.append_to = args.append_to
-        self.records_handler = RecordsHandler(tweets, args)
+        self.records_handler = RecordsHandler(tweets_handler, args)
         self.records = self.records_handler.get_only_interesting_attributes()
 
     def store(self):
