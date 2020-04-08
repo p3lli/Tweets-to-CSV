@@ -5,8 +5,8 @@ import logging
 import argparse
 import time
 from argparse import RawTextHelpFormatter
-from tweets_handler import ApiHandler
-from csv_handler import CSVFileHandler
+from api_handler import ApiHandler
+from storage_handler import StorageHandler
 from utils import validate_args
 
 
@@ -27,20 +27,20 @@ def main(args):
 
 
 def main_loop(args):
-    api_handler = ApiHandler(args.query_word, args.search_type, args.ntweets)
+    twitter_api_handler = ApiHandler(args)
     while args.nseconds:
-        retrieve_and_store_tweets(args, api_handler)
+        retrieve_and_store_tweets(args, twitter_api_handler)
         logging.info('Waiting {} seconds for next search...'.format(args.nseconds))
         time.sleep(float(args.nseconds))
-    retrieve_and_store_tweets(args, api_handler)
+    # TODO add a more elegant way to interrupt the cycle (more than CTRL+C)
+    retrieve_and_store_tweets(args, twitter_api_handler)
 
 
 def retrieve_and_store_tweets(args, api_handler):
-    tweets = api_handler.get_tweets()
-    csv_handler = CSVFileHandler(args.query_word, args.search_type,
-                                args.out_dir, args.append_to, args.clean,
-                                tweets)
-    csv_handler.export_csv()
+    tweets_handler = api_handler.get_tweets()
+    storage_handler = StorageHandler(args, tweets_handler)
+    storage_handler.store()
+
 
 def get_parser():
     """Defines the parser object for argparse."""
@@ -60,6 +60,12 @@ def get_parser():
             + '\'query_word\' must be a text file like \'keywords_list.txt\'.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
+    parser.add_argument('-s', '--storage-type', dest='storage_type',
+            choices=['CSV'], default='CSV',
+            help='Specifies which type of storage to use.\n'
+            + 'Values accepted:\n'
+            + '-\'CSV\'\n'
+            + '-\'ES\'\n')
     parser.add_argument('-n', '--number-of-tweets', dest='ntweets',
             help='Set the amount of tweets to be retrieved')
     parser.add_argument('-a', '--append', dest='append_to', action='store_true',
@@ -73,13 +79,16 @@ def get_parser():
             help='Increases log verbosity.')
     return parser
 
-
-if __name__ == '__main__':
-    parser = get_parser()
-    args = parser.parse_args()
+def set_logging_level(args):
     logging_level = logging.INFO
     if args.verbose:
         logging_level = logging.DEBUG
     logging.basicConfig(level=logging_level,
             format='%(asctime)-15s %(message)s')
+
+
+if __name__ == '__main__':
+    parser = get_parser()
+    args = parser.parse_args()
+    set_logging_level(args)
     main(args)

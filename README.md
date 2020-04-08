@@ -2,6 +2,7 @@
 
 This small project has been made to collect tweets using Twitter API and then store them in a CSV file.  
 At the moment, tweets are gathered based on keywords or directly from a specific account.  
+Since v.2.0, you can also store them in Elasticsearch
 
 ## Preface
 I do realize that the script has been used more extensively by _non computer scientists_.  
@@ -71,32 +72,45 @@ Then install the required modules:
 pip install -r requirements.txt
 ```
 
+## Elasticsearch configuration
+Following the guide [Running the Elastic Stack on Docker](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html#get-started-docker-tls)
+
 ## Project Structure
 Here is the project structure. It consists of three subpackages for handling tweets, csv and general  
 utilities. Inside the csv subpackage there is a subsubpackage for handling single records.  
 Every subpackage has a module 'constants.py' containing any constant variable specific to that subpackage.  
 ```
 Tweets-to-CSV
-├── main.py
-├── README.md
-├── requirements.txt
-├── csv_handler
-│   ├── constants.py
-│   ├── csv_handler.py
-│   ├── __init__.py
-│   ├── records_handler
-│   │   ├── constants.py
-│   │   ├── __init__.py
-│   │   └── records_handler.py
-│   └── resources
-│       └── interesting_attributes.ini
-├── tweets_handler
+
+├── api_handler
 │   ├── constants.py
 │   ├── __init__.py
 │   ├── resources
 │   │   ├── twitter_api_credentials_example.ini
 │   │   └── twitter_api_credentials.ini
-│   └── tweets_handler.py
+│   ├── tweets_handler.py
+│   ├── twitter_api_handler.py
+│   └── twitter_api_wrapper.py
+├── keywords_list.txt
+├── main.py
+├── README.md
+├── requirements.txt
+├── storage_handler
+│   ├── csv_handler
+│   │   ├── constants.py
+│   │   ├── csv_handler.py
+│   │   ├── __init__.py
+│   │   ├── records_handler
+│   │   │   ├── constants.py
+│   │   │   ├── __init__.py
+│   │   │   └── records_handler.py
+│   │   └── resources
+│   │       └── interesting_attributes.ini
+│   ├── es_handler
+│   │   ├── es_handler.py
+│   │   └── __init__.py
+│   ├── __init__.py
+│   └── storage_handler.py
 └── utils
     ├── constants.py
     ├── __init__.py
@@ -124,6 +138,11 @@ positional arguments:
 
 optional arguments:
   -h, --help     show this help message and exit.
+  -s {CSV}, --storage-type {CSV}
+                  Specifies which type of storage to use.
+                  Values accepted:
+                  -'CSV'
+                  -'ES'
   -n NTWEETS, --number-of-tweets NTWEETS
                  Set the amount of tweets to be retrieved.
   -a, --append   Appends tweets to a compatible CSV (same search, different time).

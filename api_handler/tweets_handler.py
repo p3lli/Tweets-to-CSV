@@ -1,77 +1,62 @@
-import configparser
-import time
+import constants as const
 import datetime
 import logging
-import re
-import preprocessor as prep
-import html
-import constants as const
+import time
 
+class TweetsHanlder(object):
+    """Factory class for tweets handlers.
+    It reads `TWITTER_API` from constants and then create its own api handler.
+    """
 
-class RecordsHandler(object):
-    """Handles collection of tweets as records for the CSV file.
-    Methods deal with processing and formatting tweet attributes before they
-    are stored in the .csv file columns. The list of the .csv columns is
-    defined in the attribute `interesting_attributes`.
+    @staticmethod
+    def create_tweets_handler(tweets):
+        """Create a Tweets Hanlder and returns it
+
+        Parameters
+        ----------
+        - `tweets`: retrieved tweets from the API
+        """
+        if const.TWITTER_API == 'python-twitter':
+            return PythonTweets(tweets)
+        else:
+            raise ValueError(const.TWITTER_API)
+
+class PythonTweets(object):
+    """Handles tweet from `Status` object of `python-twitter` mudule
 
     Attributes:
-    -----------
+    ----------
     - `tweets`: a list of `twitter.Status` objects, each representing a single tweet.
-    - `clean_flag`: boolean flag, if True it will add a column `cleaned_text`
-      to them .csv file. `cleaned_text` column represents `full_text` without
-      urls, hashtags or usernames.
-    - `interesting_attributes`: list of strings representing the tweets attributes
-      to save in the .csv. The list is read from `ATTR_FILE_INI`.
 
     Methods:
     --------
+    - `format_attributes(self, interesting_attributes)``: run every method to
+       format attributes which are in `interesting_attributes` list
     - `extract_user_name(self)`: extracts the screen name from the object User.
     - `convert_timestamp_created_at(self)`: converts `created_at` attribute
       in a proper timestamp.
     - `preprocess_tweet_text(self, text)`: cleans tweet text.
+    - `format_user(self)`: formats `user` attribute.
+    - `format_created_at(self)`: formats `created_at` attribute.
     - `format_text(self)`: formats `text` attribute.
     - `format_full_text(self)`: formats `full_text` attribute.
     - `format_cleaned_text(self)`: formats `cleaned_text` attribute.
     - `format_hashtags(self)`: formats `hashtags` attribute.
     - `format_geo(self)`: formats `geo` attribute.
     - `format_media(self)`: formats `media` attribute.
-    - `get_only_interesting_attributes(self)`: returns a list of dictionaries
-      representing the tweets; only the tweet attributes defined in `interesting_attributes`
-      are stored in the dictionaries.
     """
 
-
-    def __init__(self, tweets, clean_flag):
-        """Initializes RecordsHandler
-
-        Parameters:
-        -----------
-        - `tweets`: a list of `twitter.Status` objects, each representing a single tweet.
-        - `clean_flag`: boolean flag, if True it will add a column `cleaned_text`
-                    to them .csv file. `cleaned_text` column represents
-                    `full_text` without urls, hashtags or usernames."""
+    def __init__(self, tweets):
         self.tweets = tweets
-        self.clean_flag = clean_flag
-        config = configparser.ConfigParser()
-        config.read(const.ATTR_FILE_INI)
-        config_attributes = config['interesting-attributes']['attrs']
-        self.interesting_attributes = config_attributes.split(',')
+        self.formatting_defined_attributes = ['user', 'text', 'full_text', 'cleaned_text', 'created_at', 'hashtags', 'media', 'geo']
 
-
-    def extract_user_name(self):
-        """Extracts the screen name from the object User."""
-        for tweet in self.tweets:
-            tweet.user = tweet.user.screen_name
-
-
-    def convert_timestamp_created_at(self):
-        """Converts `created_at` attribute in timestamp."""
-        for tweet in self.tweets:
-            tuple_timestamp = time.strptime(tweet.created_at,
-                                            const.CREATED_AT_OLD_FORMAT)
-            tweet.created_at = time.strftime(const.CREATED_AT_NEW_FORMAT,
-                                             tuple_timestamp)
-
+    def format_attributes(self, interesting_attributes):
+        """For each interesting attribute,
+        the function calls the appropriate format method"""
+        for attribute in interesting_attributes:
+            if attribute in self.formatting_defined_attributes:
+                eval('self.format_{}()'.format(attribute))
+        return self.tweets
 
     def preprocess_tweet_text(self, text):
         """Cleans tweet text using `tweet-preprocessor` module.
@@ -118,6 +103,19 @@ class RecordsHandler(object):
                 tweet.cleaned_text = self.preprocess_tweet_text(tweet.cleaned_text.encode('utf-8'))
 
 
+    def format_created_at(self):
+        """Formats `created_at` attribute, adding that to the records"""
+        self.convert_timestamp_created_at()
+
+    def convert_timestamp_created_at(self):
+        """Converts `created_at` attribute in timestamp."""
+        for tweet in self.tweets:
+            tuple_timestamp = time.strptime(tweet.created_at,
+                                            const.CREATED_AT_OLD_FORMAT)
+            tweet.created_at = time.strftime(const.CREATED_AT_NEW_FORMAT,
+                                             tuple_timestamp)
+
+
     def format_hashtags(self):
         """Formats `hashtags` attribute, converting a list to a concatenation
         of strings."""
@@ -141,11 +139,9 @@ class RecordsHandler(object):
         """Formats `geo` attribute. Creates attributes 'lat' and 'lon'."""
         for tweet in self.tweets:
             if tweet.geo is not None:
-                tweet.lat = tweet.geo['coordinates'][0]
-                tweet.lon = tweet.geo['coordinates'][1]
+                tweet.geo = '{}, {}'.format(tweet.geo['coordinates'][0], tweet.geo['coordinates'][1])
             else:
-                tweet.lat = None
-                tweet.lon = None
+                tweet.geo = None
 
     def format_media(self):
         """Formats `media` attribute, converting a list to a concatenation
@@ -157,6 +153,14 @@ class RecordsHandler(object):
                     media_list.append(media.media_url_https)
                 tweet.media = ', '.join(media_list)
 
+    def format_user(self):
+        """Format `user` attribute, adding that to the tweet object"""
+        self.extract_user_name()
+
+    def extract_user_name(self):
+        """Extracts the screen name from the object User."""
+        for tweet in self.tweets:
+            tweet.user = tweet.user.screen_name
 
     def get_only_interesting_attributes(self):
         """Isolates just the interesting attributes of the tweets.
