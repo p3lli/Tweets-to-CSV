@@ -81,6 +81,17 @@ utilities. Inside the csv subpackage there is a subsubpackage for handling singl
 Every subpackage has a module 'constants.py' containing any constant variable specific to that subpackage.  
 ```
 Tweets-to-CSV
+
+├── api_handler
+│   ├── constants.py
+│   ├── __init__.py
+│   ├── resources
+│   │   ├── twitter_api_credentials_example.ini
+│   │   └── twitter_api_credentials.ini
+│   ├── tweets_handler.py
+│   ├── twitter_api_handler.py
+│   └── twitter_api_wrapper.py
+├── keywords_list.txt
 ├── main.py
 ├── README.md
 ├── requirements.txt
@@ -100,16 +111,6 @@ Tweets-to-CSV
 │   │   └── __init__.py
 │   ├── __init__.py
 │   └── storage_handler.py
-│   ├── __init__.py
-│   └── storage_handler.py
-├── tweets_handler
-│   ├── constants.py
-│   ├── __init__.py
-│   ├── resources
-│   │   ├── twitter_api_credentials_example.ini
-│   │   └── twitter_api_credentials.ini
-│   ├── twitter_api_wrapper.py
-│   └── tweets_handler.py
 └── utils
     ├── constants.py
     ├── __init__.py

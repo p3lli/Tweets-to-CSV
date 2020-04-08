@@ -11,7 +11,7 @@ class StorageHandler(object):
     - `storage_wrapper`: a storage object which implements the `store()` method
     """
 
-    def __init__(self, args, tweets):
+    def __init__(self, args, tweets_handler):
         """Initializes StorageHandler
 
         Parameters
@@ -19,12 +19,12 @@ class StorageHandler(object):
         - `args`: argparse data structure; it must contains:
             - `storage_type`: string, specifies the type of storge handler
                               (CSV, Elasticsearch, ...)
-            - `tweets`: list of `Status` object from `python-twitter` module
+            - `tweets_handler`: an object wrapping a list of tweets
         """
         if args.storage_type == "CSV":
-            self.storage_wrapper = CSVFileHandler(args, tweets)
+            self.storage_wrapper = CSVFileHandler(args, tweets_handler)
         elif args.storage_type == "ES":
-            self.storage_wrapper = ElasticsearchHandler(args, tweets)
+            self.storage_wrapper = ElasticsearchHandler(args, tweets_handler)
         else:
             raise ValueError(args.storage_type)
 
