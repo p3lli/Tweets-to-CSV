@@ -2,7 +2,6 @@
 
 This small project has been made to collect tweets using Twitter API and then store them in a CSV file.  
 At the moment, tweets are gathered based on keywords or directly from a specific account.  
-Since v.2.0, you can also store them in Elasticsearch
 
 ## Preface
 I do realize that the script has been used more extensively by _non computer scientists_.  
