@@ -51,22 +51,35 @@ brew install python
 pip install virtualenv
 ```
 
-After the installation, change directory to the project directory:  
+1) After the installation, change directory to the project directory:  
 ```
 cd  /path/to/Tweets-to-CSV
 ```
 
-and execute:  
+2) The script still runs with python2. Execute:  
 ```
 virtualenv --python=$(which python2) env-twi
 ```
 
-Now, activate the virtual environment inside the project directory:  
+3) Now, activate the virtual environment inside the project directory:  
 ```
 source env-twi/bin/activate
 ```
 
-Then install the required modules:  
+4) Execute:
+```
+python --version
+```
+
+5) If the version is different from 2, delete folder `env-twi` and try this command:
+
+```
+virtualenv --python=$(which python2.7) env-twi
+```
+
+Activate the virtual environment (3) and check python version (4)
+
+6) Then install the required modules:  
 ```
 pip install -r requirements.txt
 ```
@@ -153,3 +166,19 @@ optional arguments:
 
 
 ```
+
+### Examples
+- `python main.py by-keyword banana /path/to/destination/directory`
+It retrieves tweets by keyword `banana` and stores them in a CSV
+named `tweets_with_banana_TIMESTAMP.csv` in the `/path/to/destination/directory`
+directory.
+
+- `python main.py by-user ThePSF /path/to/destination/directory`
+It retrieves tweets from user `ThePSF` and stores them in a CSV
+named `tweets_by_ThePSF_TIMESTAMP.csv` in the `/path/to/destination/directory`
+directory.
+
+- `python main.py by-keywords-list path/to/keywords-list.txt /path/to/destination/directory`
+It retrieves tweets containing keywords specified in `/path/to/keywords-list.txt`
+and stores them in a CSV  named `tweets_tweets_from_keywords_list_TIMESTAMP.csv`
+in the `/path/to/destination/directory` directory.
