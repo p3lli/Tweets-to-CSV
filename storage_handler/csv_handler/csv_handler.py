@@ -111,7 +111,8 @@ class CSVFileHandler(object):
                 prefix = self.name_csv_file()
                 csv_files = self.get_list_of_csv_file_in_out_dir_with_prefix(prefix)
                 if len(csv_files) > 0:
-                    filename = csv_files[0]
+                    # TODO check if it is correct to always append on the first file
+                    filename = self._append_out_dir(csv_files[0])
                     logging.debug('Appending to CSV file \'{}\'...'.format(filename))
                     existing_dataframe = pd.read_csv(filename,
                                                      sep=const.CSV_SEPARATOR)
@@ -134,3 +135,6 @@ class CSVFileHandler(object):
         else:
             logging.info('No tweets retrieved for keyword \'{}\''
                          .format(self.query_word))
+
+    def _append_out_dir(self, filename):
+        return '{}/{}'.format(self.out_dir, filename)
