@@ -10,25 +10,12 @@ class UnitTest(unittest.TestCase):
                                                  '.',
                                                  100,
                                                  5,
-                                                 True),
-        "missing_search_type": TestCaseValidateArgs('banana',
-                                                 None,
-                                                 '.',
-                                                 100,
-                                                 5,
-                                                 False),
-        "missing_query_word": TestCaseValidateArgs(None,
-                                                 'by-keyword',
-                                                 '.',
-                                                 100,
-                                                 5,
-                                                 False),
-        "not_existing_dir": TestCaseValidateArgs('banana',
-                                                 'by-keyword',
-                                                 './not_existing_dir/',
-                                                 100,
-                                                 5,
-                                                 False)}
+                                                 True)}
+
+
+        for key in cases:
+            is_valid = validate_args(cases[key])
+            self.assertEqual(is_valid, cases[key].is_valid)
 
 
 class TestCaseValidateArgs():
