@@ -10,7 +10,7 @@ def validate_args(args):
     - 'ntweets' must be a positive number
     - 'nseconds' must be a positive number
     """
-    args_are_not_valid = validate_query_word(args) and validate_out_dir(args.outdir) and validate_ntweets(args.ntweets) and validate_nseconds(args.nseconds)
+    args_are_not_valid = validate_search_type(args) or validate_query_word(args) or validate_out_dir(args.outdir) or validate_ntweets(args.ntweets) or validate_nseconds(args.nseconds)
     if args_are_not_valid:
         return False
     else:
@@ -18,11 +18,17 @@ def validate_args(args):
         return True
 
 def validate_query_word(args):
-    not_valid_args = validate_query_word_by_user(args) or validate_query_word_for_list(args)
+    not_valid_args = args.query_word == None or validate_query_word_by_user(args) or validate_query_word_for_list(args)
     if not_valid_args:
         logging.error('ERROR: \'{}\' is not a valid user name'
                       .format(args.query_word))
     return not_valid_args
+
+def validate_search_type(args):
+    search_type_none = args.search_type == None
+    if search_type_none:
+        logging.error('ERROR: search_type not provided')
+    return search_type_none
 
 def validate_query_word_by_user(args):
     return args.query_word and len(args.query_word) > const.TWEET_MAX_LEN and args.search_type == 'by-user'

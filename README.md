@@ -84,6 +84,19 @@ Activate the virtual environment (3) and check python version (4)
 pip install -r requirements.txt
 ```
 
+## Tests
+I am slowly adding tests to the scripts.
+I know this is not the right process and it is against TDD, but unfortunately
+I started this project way before I knew TDD even exists.
+
+To run tests:
+```
+python -m unittest test
+```
+
+Make sure to execute tests before pushing a new commit
+(I am also talking to myself)
+
 ## Elasticsearch configuration
 Following the guide [Running the Elastic Stack on Docker](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html#get-started-docker-tls)
 
