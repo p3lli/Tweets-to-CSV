@@ -1,8 +1,8 @@
 """Script made to gather tweets and store them in a CSV file."""
-import sys
-import os
-import logging
 import argparse
+import logging
+import os
+import sys
 import time
 from argparse import RawTextHelpFormatter
 from api_handler import ApiHandler

@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 import constants as const
 
 def validate_args(args):

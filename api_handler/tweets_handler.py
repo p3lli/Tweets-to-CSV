@@ -1,7 +1,7 @@
-import constants as const
 import datetime
 import logging
 import time
+import constants as const
 
 class TweetsHanlder(object):
     """Factory class for tweets handlers.
