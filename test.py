@@ -11,6 +11,12 @@ class UnitTest(unittest.TestCase):
                                                  '100',
                                                  '5',
                                                  True),
+        "too_long_username": TestCaseValidateArgs('banana_banana_banana_banana_banana_banana',
+                                                 'by-user',
+                                                 '.',
+                                                 '100',
+                                                 '5',
+                                                 False),
         "missing_search_type": TestCaseValidateArgs('banana',
                                                  None,
                                                  '.',
@@ -51,7 +57,7 @@ class TestCaseValidateArgs():
     def __init__(self, query_word, search_type, out_dir, ntweets, nseconds, is_valid):
         self.query_word = query_word
         self.search_type = search_type
-        self.outdir = out_dir
+        self.out_dir = out_dir
         self.ntweets = ntweets
         self.nseconds = nseconds
         self.is_valid = is_valid
