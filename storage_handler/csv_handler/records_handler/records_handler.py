@@ -2,8 +2,6 @@ import configparser
 import datetime
 import html
 import logging
-import re
-import preprocessor as prep
 import constants as const
 
 
