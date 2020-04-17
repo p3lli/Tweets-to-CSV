@@ -1,9 +1,9 @@
-import time
+import csv
 import datetime
 import logging
-import csv
 import os
 import pandas as pd
+import time
 import constants as const
 from records_handler import RecordsHandler
 

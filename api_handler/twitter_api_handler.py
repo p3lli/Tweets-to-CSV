@@ -1,8 +1,8 @@
 import logging
-import constants as const
 import os.path
-from twitter_api_wrapper import TwitterApiHandler
+import constants as const
 from tweets_handler import TweetsHanlder
+from twitter_api_wrapper import TwitterApiHandler
 
 
 class ApiHandler(object):

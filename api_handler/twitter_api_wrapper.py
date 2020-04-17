@@ -1,6 +1,6 @@
 import configparser
-import constants as const
 import twitter
+import constants as const
 
 
 class TwitterApiHandler(object):
