@@ -1,5 +1,6 @@
 *.pyc
 __pycache__
+.pytest_cache
 env-twi/
 api_handler/resources/twitter_api_credentials.ini
 *.csv
