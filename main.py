@@ -36,8 +36,8 @@ def main_loop(args):
     retrieve_and_store_tweets(args, twitter_api_handler)
 
 
-def retrieve_and_store_tweets(args, api_handler):
-    tweets_handler = api_handler.get_tweets()
+def retrieve_and_store_tweets(args, twitter_api_handler):
+    tweets_handler = twitter_api_handler.get_tweets()
     storage_handler = StorageHandler(args, tweets_handler)
     storage_handler.store()
 

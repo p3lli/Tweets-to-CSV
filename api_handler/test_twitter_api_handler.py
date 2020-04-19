@@ -1,9 +1,6 @@
 import pytest
 from twitter_api_handler import ApiHandler
 
-#self.api = TwitterApiHandler(args.ntweets, const.TWITTER_API)
-#twitter_api_handler = ApiHandler(args)
-
 test_tweets = [
 {'created_at': '2019-01-10T20:00:00Z', 'user': 'user1',
 'text': 'this is some text, banana',
