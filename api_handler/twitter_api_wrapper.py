@@ -1,6 +1,7 @@
 import configparser
 import twitter
 import constants as const
+from tweets_handler import MockTweet
 
 
 class TwitterApiHandler(object):
@@ -14,17 +15,20 @@ class TwitterApiHandler(object):
     - `api_handler`: wrapper for a specific Twitter API
     """
 
-    def __init__(self, max_number_of_tweets):
+    def __init__(self, max_number_of_tweets, api_handler_type, test_tweets):
         """Initializes TwitterApiHandler
 
         Parameters
         ----------
         - `max_number_of_tweets`: max number of tweets asked
+        - `api_handler_type`: API handler type
         """
-        if const.TWITTER_API == 'python-twitter':
+        if api_handler_type == 'python-twitter':
             self.api_handler = PythonTwitterApiHandler(max_number_of_tweets)
+        elif api_handler_type == 'mock':
+            self.api_handler = MockApiHandler(max_number_of_tweets, test_tweets)
         else:
-            raise ValueError(const.TWITTER_API)
+            raise ValueError(api_handler_type)
 
     def retrieve_tweets_by_term(self, query_word):
         """Wrapper method to `retrieve_tweets_by_term()` method of
@@ -83,3 +87,27 @@ class PythonTwitterApiHandler(object):
                 return ntweets
             else:
                 return const.MAX_NUMBER_OF_TWEETS
+
+class MockApiHandler(object):
+
+    def __init__(self, max_number_of_tweets, test_tweets):
+        self.max_number_of_tweets = max_number_of_tweets
+        self.tweets = test_tweets
+
+    def retrieve_tweets_by_term(self, query_word):
+        results = []
+        for tweet in self.tweets:
+            if tweet['full_text'] and query_word in tweet['full_text']:
+                results.append(tweet)
+                if len(results) == self.max_number_of_tweets:
+                    break
+        return results
+
+    def retrieve_tweets_by_screen_name(self, query_word):
+        results = []
+        for tweet in self.tweets:
+            if tweet['user'] and query_word == tweet['user']:
+                results.append(tweet)
+                if len(results) == self.max_number_of_tweets:
+                    break
+        return results

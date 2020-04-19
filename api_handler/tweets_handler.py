@@ -199,3 +199,17 @@ class PythonTweets(object):
                     for key in self.interesting_attributes}
                    for tweet in self.tweets]
         return records
+
+
+class MockTweet(object):
+
+    def __init__(self, tweet_dict):
+        self.created_at = tweet_dicts['created_at']
+        self.user = tweet_dicts['user']
+        self.text = tweet_dicts['text']
+        self.full_text = tweet_dicts['full_text']
+        self.favorite_count = tweet_dicts['favorite_count']
+        self.retweet_count = tweet_dicts['retweet_count']
+        self.hashtags = tweet_dicts['hashtags']
+        self.urls = tweet_dicts['urls']
+        self.geo = tweet_dicts['geo']

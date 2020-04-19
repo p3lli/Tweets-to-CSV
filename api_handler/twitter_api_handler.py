@@ -32,7 +32,7 @@ class ApiHandler(object):
     - `read_list_from_file(self)`: reads list of keyword or users from a text file."""
 
 
-    def __init__(self, args):
+    def __init__(self, args, api_handler_type=const.TWITTER_API, test_tweets=[]):
         """Initializes ApiHandler
 
         Parameters:
@@ -40,11 +40,12 @@ class ApiHandler(object):
         - `args`: argparse data structure; it must contains:
             - `query_word`: word or username to be searched
             - `search_type`: type of search (by user or by keyword)
-            - `ntweets`: maximum number of tweets to be retrieved"""
+            - `ntweets`: maximum number of tweets to be retrieved
+        - `api_handler_type`: API handler type, default const.TWITTER_API"""
         if args:
             self.query_word = args.query_word
             self.search_type = args.search_type
-            self.api = TwitterApiHandler(args.ntweets)
+            self.api = TwitterApiHandler(args.ntweets, api_handler_type, test_tweets)
 
 
     def get_tweets(self):
