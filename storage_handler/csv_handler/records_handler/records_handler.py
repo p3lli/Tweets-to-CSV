@@ -13,7 +13,7 @@ class RecordsHandler(object):
 
     Attributes:
     -----------
-    - `tweets_handler`: a an handler for tweet objects
+    - `tweets_handler`: a handler for tweet objects (if None, it is a test) #TODO
     - `clean_flag`: boolean flag, if True it will add a column `cleaned_text`
       to them .csv file. `cleaned_text` column represents `full_text` without
       urls, hashtags or usernames.
@@ -49,7 +49,7 @@ class RecordsHandler(object):
 
     def _extract_interesting_attributes_from_config(self):
         config = configparser.ConfigParser()
-        config.read(const.ATTR_FILE_INI)
+        config.read(const.ATTR_FILE_INI.decode()) #decode to solve "DeprecationWarning: You passed a bytestring as `filenames`"
         config_attributes = config['interesting-attributes']['attrs']
         interesting_attributes = config_attributes.split(',')
         return interesting_attributes
