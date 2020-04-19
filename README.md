@@ -91,7 +91,7 @@ I started this project way before I knew TDD even exists.
 
 To run tests:
 ```
-python -m unittest test
+pytest
 ```
 
 Make sure to execute tests before pushing a new commit
