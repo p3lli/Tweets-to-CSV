@@ -202,6 +202,7 @@ class PythonTweets(object):
 
 
 class MockTweet(object):
+    """Still not used"""
 
     def __init__(self, tweet_dict):
         self.created_at = tweet_dicts['created_at']
