@@ -7,7 +7,7 @@ test_tweets = [
 'full_text': 'this is some full text, banana #banana',
 'favorite_count': '42',
 'retweet_count': '42',
-'hashtag': '#banana',
+'hashtags': '#banana',
 'urls': 'https://banana.bz/'
 },
 {'created_at': '2019-01-14T18:30:00Z', 'user': 'user1',
@@ -15,7 +15,7 @@ test_tweets = [
 'full_text': 'this is some other full text, banana #banana',
 'favorite_count': '42',
 'retweet_count': '42',
-'hashtag': '#banana',
+'hashtags': '#banana',
 'urls': 'https://banana.bz/'
 },
 {'created_at': '2019-01-29T20:00:00Z', 'user': 'user1',
@@ -23,7 +23,7 @@ test_tweets = [
 'full_text': 'this is some full text, ananas #ananas',
 'favorite_count': '42',
 'retweet_count': '42',
-'hashtag': '#ananas',
+'hashtags': '#ananas',
 'urls': 'https://banana.bz/'
 },
 {'created_at': '2020-04-02T12:30:00Z', 'user': 'user2',
@@ -31,15 +31,16 @@ test_tweets = [
 'full_text': 'I am also saying a full text banana #banana',
 'favorite_count': '42',
 'retweet_count': '42',
-'hashtag': '#banana',
+'hashtags': '#banana',
 'urls': 'https://banana.bz/'
 }
 ]
 
 class APIHandlerArgsTestCase():
-    def __init__(self, query_word, search_type, ntweets, ntweets_retrieved):
+    def __init__(self, query_word, search_type, subquery_word, ntweets, ntweets_retrieved):
         self.query_word = query_word
         self.search_type = search_type
+        self.subquery_word = subquery_word
         self.ntweets = ntweets
         self.ntweets_retrieved = ntweets_retrieved
 
@@ -48,14 +49,17 @@ def test_get_tweets_by_keyword():
     cases = {
         "retrieve_all_tweets": APIHandlerArgsTestCase('banana',
                                                     'by-keyword',
+                                                    '',
                                                     200,
                                                     3),
         "retrieve_just_one_tweet": APIHandlerArgsTestCase('banana',
                                                     'by-keyword',
+                                                    '',
                                                     1,
                                                     1),
         "no_tweets_with_keyword": APIHandlerArgsTestCase('mango',
                                                     'by-keyword',
+                                                    '',
                                                     100,
                                                     0)}
     for key in cases:
@@ -68,16 +72,25 @@ def test_get_tweets_by_user():
     cases = {
         "retrieve_all_tweets": APIHandlerArgsTestCase('user1',
                                                     'by-user',
+                                                    '',
                                                     200,
                                                     3),
         "retrieve_just_one_tweet": APIHandlerArgsTestCase('user1',
                                                     'by-user',
+                                                    '',
                                                     1,
                                                     1),
         "no_tweets_with_keyword": APIHandlerArgsTestCase('user3',
                                                     'by-user',
+                                                    '',
                                                     100,
-                                                    0)}
+                                                    0),
+        "retrieve_tweets_by_user_with_keyword": APIHandlerArgsTestCase('user1',
+                                                    'by-user',
+                                                    'ananas',
+                                                    200,
+                                                    1)}
+
     for key in cases:
         api_handler = ApiHandler(cases[key], 'mock', test_tweets)
         results = api_handler.get_tweets_by_user()

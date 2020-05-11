@@ -39,12 +39,14 @@ class ApiHandler(object):
         -----------
         - `args`: argparse data structure; it must contains:
             - `query_word`: word or username to be searched
-            - `search_type`: type of search (by user or by keyword)
+            - `search_type`: type of search (by-user or by-keyword)
+            - `subquery_word`: word to be searched in tweets from user
             - `ntweets`: maximum number of tweets to be retrieved
         - `api_handler_type`: API handler type, default const.TWITTER_API"""
         if args:
             self.query_word = args.query_word
             self.search_type = args.search_type
+            self.subquery_word = args.subquery_word
             self.api = TwitterApiHandler(args.ntweets, api_handler_type, test_tweets)
 
 
@@ -79,6 +81,7 @@ class ApiHandler(object):
         except Exception, e:
             logging.warning('A problem occurred for screen name "{}": {}'
                     .format(self.query_word, str(e)))
+        results = self._filter_tweets_by_subquery(results)
         return results
 
 
@@ -111,6 +114,7 @@ class ApiHandler(object):
             except Exception, e:
                 logging.warning('A problem occurred for screen name "{}": {}'
                         .format(query_word, str(e)))
+        list_results = self._filter_tweets_by_subquery(list_results)
         return list_results
 
 
@@ -124,3 +128,11 @@ class ApiHandler(object):
         else:
             logging.warn('{} is not a file'.format(self.query_word))
         return query_words
+
+
+    def _filter_tweets_by_subquery(self, tweets):
+        """Filters tweets by-user using a keyword (subquery_word)"""
+        if self.subquery_word:
+            return [tweet for tweet in tweets if tweet.full_text and self.subquery_word in tweet.full_text]
+        else:
+            return tweets

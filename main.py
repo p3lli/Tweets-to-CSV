@@ -60,6 +60,8 @@ def get_parser():
             + '\'query_word\' must be a text file like \'keywords_list.txt\'.')
     parser.add_argument('out_dir', metavar='out_dir', type=str,
             help='Directory where the CSV file will be saved.')
+    parser.add_argument('-wk', '--with-keyword', dest='subquery_word',
+            help='A keyword to filter tweets from user (to be used with \'by-user\')')
     parser.add_argument('-s', '--storage-type', dest='storage_type',
             choices=['CSV'], default='CSV',
             help='Specifies which type of storage to use.\n'

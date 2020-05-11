@@ -150,33 +150,34 @@ usage: main.py [-h] [-v] search_type query_word out_dir
 Script made to gather tweets and store them in a CSV file.
 
 positional arguments:
-  search_type    Specifies the type of search to be performed.
-                 Values accepted:
-                 -'by-keyword'
-                 -'by-user'
-                 -'by-keywords-list'
-                 -'by-users-list'
-  query_word     A keyword or a username to be used in the search.
-                 If selecting 'by-keywords-list' or 'by-users-list',
-                 'query_word' must be a text file like 'keywords_list.txt'.
-  out_dir        Directory where the CSV file will be saved.
+search_type           Specifies the type of search to be performed.
+                      Values accepted:
+                      -'by-keyword'
+                      -'by-user'
+                      -'by-keywords-list'
+                      -'by-users-list'
+query_word            A keyword or a username to be used in the search.
+                      If selecting 'by-keywords-list' or 'by-users-list',
+                      'query_word' must be a text file like 'keywords_list.txt'.
+out_dir               Directory where the CSV file will be saved.
 
 optional arguments:
-  -h, --help     show this help message and exit.
-  -s {CSV}, --storage-type {CSV}
-                  Specifies which type of storage to use.
-                  Values accepted:
-                  -'CSV'
-                  -'ES'
-  -n NTWEETS, --number-of-tweets NTWEETS
-                 Set the amount of tweets to be retrieved.
-  -a, --append   Appends tweets to a compatible CSV (same search, different time).
-  -r NSECONDS, --repeat-every NSECONDS
-                 Repeats the same search every NSECONDS
-  -c, --clean    Adds a custom column 'cleaned_text' in which text is cleaned
-                 by emoji, smiley, url and mentions.
-  -v, --verbose  Increases log verbosity.
-
+-h, --help            show this help message and exit
+-wk SUBQUERY_WORD, --with-keyword SUBQUERY_WORD
+                      A keyword to filter tweets from user (to be used with 'by-user')
+-s {CSV}, --storage-type {CSV}
+                      Specifies which type of storage to use.
+                      Values accepted:
+                      -'CSV'
+                      -'ES'
+-n NTWEETS, --number-of-tweets NTWEETS
+                      Set the amount of tweets to be retrieved
+-a, --append          Appends tweets to a compatible CSV (same search, different time).
+-r NSECONDS, --repeat-every NSECONDS
+                      Repeats the same search every NSECONDS
+-c, --clean           Adds a custom column 'cleaned_text' in which text is cleaned
+                      by emoji, smiley, url and mentions.
+-v, --verbose         Increases log verbosity.
 
 ```
 
@@ -190,6 +191,11 @@ directory.
 It retrieves tweets from user `ThePSF` and stores them in a CSV
 named `tweets_by_ThePSF_TIMESTAMP.csv` in the `/path/to/destination/directory`
 directory.
+
+- `python main.py by-user ThePSF -wk python /path/to/destination/directory`
+It retrieves tweets from user `ThePSF` containing the word `python`
+and stores them in a CSV named `tweets_by_ThePSF_TIMESTAMP.csv`
+in the `/path/to/destination/directory` directory.
 
 - `python main.py by-keywords-list path/to/keywords-list.txt /path/to/destination/directory`
 It retrieves tweets containing keywords specified in `/path/to/keywords-list.txt`

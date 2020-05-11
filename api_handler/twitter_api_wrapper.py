@@ -1,7 +1,6 @@
 import configparser
 import twitter
 import constants as const
-from tweets_handler import MockTweet
 
 
 class TwitterApiHandler(object):
@@ -98,7 +97,8 @@ class MockApiHandler(object):
         results = []
         for tweet in self.tweets:
             if tweet['full_text'] and query_word in tweet['full_text']:
-                results.append(tweet)
+                mockTweet = MockTweet(tweet)
+                results.append(mockTweet)
                 if len(results) == self.max_number_of_tweets:
                     break
         return results
@@ -107,7 +107,23 @@ class MockApiHandler(object):
         results = []
         for tweet in self.tweets:
             if tweet['user'] and query_word == tweet['user']:
-                results.append(tweet)
+                mockTweet = MockTweet(tweet)
+                results.append(mockTweet)
                 if len(results) == self.max_number_of_tweets:
                     break
         return results
+
+
+class MockTweet(object):
+    """Still not used"""
+
+    def __init__(self, tweet_dict):
+        self.created_at = tweet_dict['created_at']
+        self.user = tweet_dict['user']
+        self.text = tweet_dict['text']
+        self.full_text = tweet_dict['full_text']
+        self.favorite_count = tweet_dict['favorite_count']
+        self.retweet_count = tweet_dict['retweet_count']
+        self.hashtags = tweet_dict['hashtags']
+        self.urls = tweet_dict['urls']
+        #self.geo = tweet_dict['geo']
