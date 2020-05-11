@@ -28,7 +28,18 @@ def validate_search_type(args):
     search_type_none = args.search_type == None
     if search_type_none:
         logging.error('ERROR: search_type not provided')
-    return search_type_none
+        return search_type_none
+    if args.search_type == 'by-user':
+        if args.subsearch_type:
+            if args.subsearch_type != 'with-keyword':
+                return True
+            else:
+                if args.subquery_word is None or args.subquery_word == '':
+                    return True
+        else:
+            if args.subquery_word:
+                return True
+    return False
 
 def validate_query_word_by_user(args):
     return args.query_word and len(args.query_word) > const.TWEET_MAX_LEN and args.search_type == 'by-user'
